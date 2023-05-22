@@ -6,7 +6,6 @@ __pycache__/
 # build
 build/
 dist/
-/*.spec
 
 # app specific
 .venv/

@@ -1,0 +1,12 @@
+# python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# build
+build/
+dist/
+/*.spec
+
+# app specific
+.venv/

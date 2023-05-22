@@ -48,7 +48,7 @@ Install from Copr:
 
 ```shell
 sudo dnf copr enable bashsenpai/cli
-sudo install senpai-cli
+sudo dnf install senpai-cli
 ```
 
 ### Arch Linux-based

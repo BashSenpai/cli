@@ -1,0 +1,6 @@
+#!/usr/bin/make -f
+
+export PYBILD_NAME = senpai-cli
+
+%:
+	dh $@ --with python3 --buildsystem=pybuild

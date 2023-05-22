@@ -6,13 +6,15 @@ Summary:        BashSenpai command line interface
 License:        Apache-2.0
 Source0:        %{name}-%{version}.tar.gz
 
-BuildArch: noarch
+BuildArch:      noarch
 
 BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
+BuildRequires:  python3-requests
+BuildRequires:  python3-toml
 
-Requires:       python3-requests
-Requires:       python3-toml
+#Requires:       python3-requests
+#Requires:       python3-toml
 
 %description
 BashSenpai is a terminal assistant powered by ChatGPT that transforms instructions into ready-to-use commands.
@@ -34,8 +36,8 @@ BashSenpai is a terminal assistant powered by ChatGPT that transforms instructio
 %doc README.md
 %license LICENSE
 %{_bindir}/senpai
-%{python3_sitelib}/%{name}-*.egg-info/
-%{python3_sitelib}/%{name}/
+%{python3_sitelib}/senpai_cli-*.egg-info/
+%{python3_sitelib}/senpai/
 
 
 %changelog

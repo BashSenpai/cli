@@ -54,27 +54,27 @@ def main():
         senpai.history.clear()
 
     # parse the prompt
-    match args.prompt[0]:
-        case 'login':
-            if len(args.prompt) > 1:
-                print('Error! The login command takes no extra arguments.')
-                sys.exit(1)
+    prompt = args.prompt[0]
+    if prompt == 'login':
+        if len(args.prompt) > 1:
+            print('Error! The login command takes no extra arguments.')
+            sys.exit(1)
 
-            # read the auth token from the stdin and send a login request
-            token = input('Auth token: ')
-            senpai.api.login(token)
+        # read the auth token from the stdin and send a login request
+        token = input('Auth token: ')
+        senpai.api.login(token)
 
-        case 'become':
-            if len(args.prompt) == 1:
-                print('Error! Please provide the character you wish BashSenpai to impersonate.')
-                sys.exit(2)
+    elif prompt == 'become':
+        if len(args.prompt) == 1:
+            print('Error! Please provide the character you wish BashSenpai to impersonate.')
+            sys.exit(2)
 
-            persona = ' '.join(args.prompt[1:])
-            senpai.config.set_value('persona', persona)
-            senpai.config.write()
-            print('New persona confirmed.')
+        persona = ' '.join(args.prompt[1:])
+        senpai.config.set_value('persona', persona)
+        senpai.config.write()
+        print('New persona confirmed.')
 
-        case _:
-            question = ' '.join(args.prompt)
-            response = senpai.ask_question(question)
-            print(response)
+    else:
+        question = ' '.join(args.prompt)
+        response = senpai.ask_question(question)
+        print(response)

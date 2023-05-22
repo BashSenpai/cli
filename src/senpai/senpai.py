@@ -1,8 +1,18 @@
+import os
 from pathlib import Path
+import sys
 
 from .api import API
 from .config import Config
 from .history import History
+
+
+if sys.platform.startswith('win'):
+    CONFIG_BASE = Path(os.path.normpath(os.getenv('LOCALAPPDATA')))
+elif sys.platform.startswith('darwin'):
+    CONFIG_BASE = Path.home() / 'Library' / 'Application Support'
+else:  # linux, freebsd, etc.
+    CONFIG_BASE = Path.home() / '.config'
 
 
 class BashSenpai:
@@ -25,7 +35,7 @@ class BashSenpai:
 
     """
 
-    CONFIG_DIR = Path.home() / '.config' / 'senpai'
+    CONFIG_DIR = CONFIG_BASE / 'senpai'
     TERMINAL_COMMENT = '\x1B[37m%s\x1B[0m'
     TERMINAL_COMMAND = '\x1B[;1m\x1B[94m%s\x1B[0m'
 

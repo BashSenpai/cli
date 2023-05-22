@@ -5,13 +5,13 @@ from .senpai import BashSenpai
 
 
 def main():
-    """Entry point of the BashSenpai command line interface."""
+    """Entry point of the BashSenpai command-line interface."""
 
-    # parse any command line arguments
+    # parse any command-line arguments
     parser = argparse.ArgumentParser(
         prog='senpai',
         usage='%(prog)s [-h | --help] [-n | --new] prompt',
-        description='BashSenpai command line interface.',
+        description='BashSenpai command-line interface.',
         epilog='\n'.join([
             'valid commands:',
             '%(prog)s login',

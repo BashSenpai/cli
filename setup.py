@@ -23,7 +23,7 @@ def get_version(rel_path):
 setup(
     name='senpai-cli',
     version=get_version('src/senpai/__init__.py'),
-    description='BashSenpai command line interface',
+    description='BashSenpai command-line interface',
     long_description=readme(),
     long_description_content_type='text/markdown',
     url='https://BashSenpai.com/',

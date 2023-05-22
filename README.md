@@ -4,7 +4,7 @@ BashSenpai is a command-line tool that brings the power of the BashSenpai API to
 
 <div align="center">
     <br>
-    <img src="media/screenshot.png" alt="Example usage of the BashSenpai command line interface" title="BashSenpai in action">
+    <img src="media/screenshot.png" alt="Example usage of the BashSenpai command-line interface" title="BashSenpai in action">
 </div>
 <p align="center">
     <a href="https://bashsenpai.com/"><b>BashSenpai.com</b></a>

@@ -1,7 +1,7 @@
 Name:           senpai-cli
 Version:        0.70b
 Release:        1%{?dist}
-Summary:        BashSenpai command line interface
+Summary:        BashSenpai command-line interface
 
 License:        Apache-2.0
 Source0:        %{name}-%{version}.tar.gz

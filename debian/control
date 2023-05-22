@@ -9,5 +9,5 @@ X-Python3-Version: >= 3.10
 Package: senpai-cli
 Architecture: all
 Depends: ${python3:Depends},python3-requests,python3-toml
-Description: BashSenpai command line interface.
+Description: BashSenpai command-line interface.
  BashSenpai is a terminal assistant powered by ChatGPT that transforms instructions into ready-to-use commands.

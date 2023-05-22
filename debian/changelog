@@ -1,3 +1,10 @@
+senpai-cli (0.71b) lunar; urgency=medium
+
+  * Various fixes in metadata
+  * Other small bug fixes
+
+ -- Bogdan Tatarov <bogdan@tatarov.me>  Mon, 22 May 2023 02:10:58 +0300
+
 senpai-cli (0.70b-3ubuntu3) lunar; urgency=medium
 
   * First public release

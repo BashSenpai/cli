@@ -1,5 +1,6 @@
 from pathlib import Path
 import toml
+from typing import Union
 
 
 class Config:
@@ -43,7 +44,7 @@ class Config:
             'PROG': config['main'].get('prog', 'senpai'),
         }
 
-    def get_value(self, setting: str) -> str | None:
+    def get_value(self, setting: str) -> Union[str, None]:
         """Get the value of a specific configuration setting.
 
         Args:

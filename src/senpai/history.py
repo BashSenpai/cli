@@ -1,5 +1,6 @@
 import json
 from pathlib import Path
+from typing import Any, Dict, List, Union
 
 
 class History:
@@ -54,11 +55,11 @@ class History:
 
         self._history = list()
 
-    def get_history(self) -> list[dict[str: str] | None]:
+    def get_history(self) -> List[Union[Dict[str, str], Any]]:
         """Get the current user history.
 
         Returns:
-            list: The list of prompts in the user's history.
+            List: The list of prompts in the user's history.
 
         """
 

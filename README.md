@@ -76,7 +76,7 @@ brew install senpai-cli
 
 ### Windows
 
-Download: **[Installer](https://github.com/BashSenpai/cli/releases/download/v0.72b/BashSenpaiSetup.exe)**.
+Download: **[Installer](https://bashsenpai.com/latest/BashSenpaiSetup.exe)**.
 
 ## Usage
 

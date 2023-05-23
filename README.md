@@ -14,10 +14,11 @@ BashSenpai is a command-line tool that brings the power of the BashSenpai API to
 ## Features
 
 - Supercharged by ChatGPT.
-- Interact with the BashSenpai API to ask questions and receive detailed answers.
-- Store and manage your interaction history for future reference.
-- Customize the persona of BashSenpai to add a touch of fun and personality to your interactions.
-- Beautifully formatted responses using colors and comments for improved readability.
+- Heavily customized prompts that take advantage of a multi-step self-refletion process for best possible results.
+- Ask follow-up questions without providing any contxt; our backend automatically takes care of including your last interactons.
+- Always get answers that can be run directly in the terminal along with explanations of what each command does.
+- Nicely formatted responses with customizable colors for improved readability.
+- Change the persona of BashSenpai to add a touch of fun and personality to your interactions.
 
 ## Table of Contents
 

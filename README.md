@@ -42,7 +42,9 @@ sudo apt update
 sudo apt install senpai-cli
 ```
 
-### RPM-based (Fedora, CentOS Stream, RHEL)
+Supported distributions: **Ubuntu 22.04 LTS** or later, **Linux Mint 21** or later, **Pop!_OS 22.04**, **KDE neon 5.27**, **elementary OS 7**.
+
+### RPM-based
 
 Install from Copr:
 
@@ -50,6 +52,8 @@ Install from Copr:
 sudo dnf copr enable bashsenpai/cli
 sudo dnf install senpai-cli
 ```
+
+Supported distributions: **Fedora 38**, **RHEL 9**, **CentOS Stream 9**.
 
 ### Arch Linux-based
 
@@ -59,9 +63,11 @@ Install from AUR:
 yay -S senpai-cli
 ```
 
+Supported distributions: any Arch-based rolling-release distribution that supports installing packages from the AUR. **Manjaro** should also work, but it's untested.
+
 ### MacOS
 
-Istall with Homebrew:
+Install with Homebrew:
 
 ```shell
 brew tap BashSenpai/homebrew-core

@@ -5,6 +5,14 @@ import sys
 from .senpai import BashSenpai
 
 
+class SimpleNargsFormatter(argparse.RawDescriptionHelpFormatter):
+    """Formatter that skips metavar text formatting."""
+
+    def _format_args(self, action, default_metavar):
+        get_metavar = self._metavar_formatter(action, default_metavar)
+        return '%s' % get_metavar(1)
+
+
 # get __version__ from a file
 def get_version() -> str:
     """Get the current version of the application by reading it from __init__.py
@@ -48,7 +56,7 @@ def main():
             '  %(prog)s become angry pirate',
             '  %(prog)s how to disable ssh connections',
         ]),
-        formatter_class=argparse.RawDescriptionHelpFormatter,
+        formatter_class=SimpleNargsFormatter,
     )
 
     action = parser.add_argument(
@@ -56,8 +64,8 @@ def main():
         type=str,
         metavar='col',
         nargs='+',
-        help='set color for the commands, check the "available colors" \
-              section for a list of all available options',
+        help='set color for the commands, check the "available colors" ' + \
+             'section for a list of all available options',
     )
 
     action = parser.add_argument(

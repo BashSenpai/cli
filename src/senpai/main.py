@@ -1,7 +1,21 @@
 import argparse
+from pathlib import Path
 import sys
 
 from .senpai import BashSenpai
+
+
+# get __version__ from a file
+def get_version():
+    cur_dir = Path(__file__).parent.resolve()
+    with open(cur_dir / '__init__.py') as f:
+        filedata = f.read()
+    for line in filedata.splitlines():
+        if line.startswith('__version__'):
+            delim = '"' if '"' in line else "'"
+            return line.split(delim)[1]
+    else:
+        raise RuntimeError('Unable to find version string.')
 
 
 def main():
@@ -10,16 +24,17 @@ def main():
     # parse any command-line arguments
     parser = argparse.ArgumentParser(
         prog='senpai',
-        usage='%(prog)s [-h | --help] [-n | --new] prompt',
+        usage='%(prog)s [options] command',
         description='BashSenpai command-line interface.',
         epilog='\n'.join([
             'valid commands:',
-            '%(prog)s login',
-            '%(prog)s become <character>  # use "default" to revert back to normal comments',
+            '  <ask a question>',
+            '  login',
+            '  become <character>  # use "default" to revert back to normal comments',
             '',
             'example usage:',
-            '%(prog)s become angry pirate',
-            '%(prog)s how to disable ssh connections',
+            '  %(prog)s become angry pirate',
+            '  %(prog)s how to disable ssh connections',
         ]),
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
@@ -31,6 +46,13 @@ def main():
         help='ignore previous history when sending a question',
     )
     action.option_strings.remove('--no-new')
+
+    parser.add_argument(
+        '-v', '--version',
+        action='version',
+        help='show current version',
+        version='%(prog)s ' + get_version(),
+    )
 
     parser.add_argument(
         'prompt',

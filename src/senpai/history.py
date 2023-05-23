@@ -29,6 +29,7 @@ class History:
             located.
 
         """
+
         self.path = path / 'history.json'
         self._load()
 
@@ -59,7 +60,7 @@ class History:
         """Get the current user history.
 
         Returns:
-            List: The list of prompts in the user's history.
+            list: The list of prompts in the user's history.
 
         """
 

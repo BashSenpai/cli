@@ -33,7 +33,7 @@ class API:
         self._config = config
         self._history = history
 
-    def login(self, token: str) -> str:
+    def login(self, token: str) -> None:
         """Validate the auth token and store it in the config file.
 
         Args:

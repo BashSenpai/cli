@@ -7,6 +7,7 @@ from .config import Config
 from .history import History
 
 
+# default config storage based on OS type
 if sys.platform.startswith('win'):
     CONFIG_BASE = Path(os.path.normpath(os.getenv('LOCALAPPDATA')))
 elif sys.platform.startswith('darwin'):
@@ -46,6 +47,7 @@ class BashSenpai:
         the `config`, `history`, and `api` objects.
 
         """
+
         # create config dir if it doesn't exist
         path = Path(self.CONFIG_DIR)
         path.mkdir(parents=True, exist_ok=True)
@@ -64,6 +66,7 @@ class BashSenpai:
             str: The response from the API formatted with huepy.
 
         """
+
         # send an API call with the question and get a plain-text response
         response = self.api.question(question)
 

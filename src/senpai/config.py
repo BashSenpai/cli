@@ -12,8 +12,8 @@ class Config:
 
     Usage:
     >>> config = Config(path=Path('/path/to/config'))
-    >>> token = config.get_value('TOKEN')
-    >>> config.set_value('TOKEN', '<your_auth_token>')
+    >>> token = config.get_value('token')
+    >>> config.set_value('token', '<your_auth_token>')
     >>> config.write()
 
     """

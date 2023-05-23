@@ -6,7 +6,14 @@ from .senpai import BashSenpai
 
 
 # get __version__ from a file
-def get_version():
+def get_version() -> str:
+    """Get the current version of the application by reading it from __init__.py
+
+    Returns:
+        str: The version of the application
+
+    """
+
     cur_dir = Path(__file__).parent.resolve()
     with open(cur_dir / '__init__.py') as f:
         filedata = f.read()

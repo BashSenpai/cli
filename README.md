@@ -143,9 +143,9 @@ This project is licensed under the Apache 2.0 License. See the [LICENSE](LICENSE
 
 ### Version 0.75 (planned)
 
-- [ ] Command execution: execute any provided list of commands directly in the terminal with an optional prompt for - [ ]g
-- [x] MacOS build: proper MacOS integration with an optional ability to make the API know your OS type to improve the - [ ]esults
-- [ ] Windows build: support for WSL2 and potentially a few other third-party terminal emulators
+- [x] MacOS build: proper MacOS integration
+- [x] Windows build: native build script with an installer
+- [ ] Command execution: execute any provided list of commands directly in the terminal with an optional feature to edit each one beforehand
 - [ ] Configurable color schemes: ability to change the default colors so they fit better with your terminal configuration
 
 ### Other planned features

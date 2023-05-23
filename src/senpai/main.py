@@ -50,11 +50,13 @@ def main():
             'valid commands:',
             '  <ask a question>',
             '  login',
-            '  become <character>  # use "default" to revert back to normal comments',
+            '  become <character>   # use "default" to revert back to normal messages',
             '',
             'example usage:',
             '  %(prog)s become angry pirate',
             '  %(prog)s how to disable ssh connections',
+            '',
+            'For more information, visit: https://bashsenpai.com/'
         ]),
         formatter_class=SimpleNargsFormatter,
     )

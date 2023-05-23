@@ -48,9 +48,11 @@ class API:
             if response['error']['code'] == 1:
                 print('Error! No token provided.')
             elif response['error']['code'] == 2:
-                print('Error! Invalid token provided.')
+                print('Error! Invalid auth token provided.')
+                print('Visit https://bashsenpai.com/dashboard for more information.')
             elif response['error']['code'] == 3:
-                print('Error! This user doesn\'t have a subscription.')
+                print('Error! Your user doesn\'t have a subscription.')
+                print('Visit https://bashsenpai.com/dashboard and subscribe.')
             sys.exit(5)
 
         # store the auth token in the config file

@@ -42,6 +42,8 @@ class Config:
             'TOKEN': config['main'].get('token', None),
             'PERSONA': config['main'].get('persona', 'default'),
             'PROG': config['main'].get('prog', 'senpai'),
+            'COMMAND_COLOR': config['main'].get('command_color', 'bold bright blue'),
+            'COMMENT_COLOR': config['main'].get('comment_color', 'bright gray'),
         }
 
     def get_value(self, setting: str) -> Union[str, None]:
@@ -76,6 +78,8 @@ class Config:
                     'token': self._config['TOKEN'],
                     'persona': self._config['PERSONA'],
                     'prog': self._config['PROG'],
+                    'command_color': self._config['COMMAND_COLOR'],
+                    'comment_color': self._config['COMMENT_COLOR'],
                 }
             }
             toml.dump(config_data, f)

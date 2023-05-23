@@ -120,6 +120,10 @@ This command sends the question to the BashSenpai API and displays an informativ
 
 ## Configuration
 
+* `--command-color`: sets the color of the commands in the responses. Valid options are: black, white, gray, red, greeen, yellow, blue, magenta and cyan. There are also brighter versions of each color, for example: "bright blue". You can also make colors bold, for example: "bold red" or "bold bright cyan".
+
+* `--comment-color`: sets the color of the comments in the responses.
+
 Please check our [Roadmap](#roadmap) section for new and planned features as we develop the configuration options. We are committed to making BashSenpai user-friendly, flexible and easily-configurable and we value your initial feedback. If you have any suggestions or feature requests, don't hesitate to use the appropriate tools provided by GitHub to share your thoughts with us.
 
 ## Contributing
@@ -152,7 +156,7 @@ This project is licensed under the Apache 2.0 License. See the [LICENSE](LICENSE
 - [x] MacOS build: proper MacOS integration
 - [x] Windows build: native build script with an installer
 - [ ] Command execution: execute any provided list of commands directly in the terminal with an optional feature to edit each one beforehand
-- [ ] Configurable color schemes: ability to change the default colors so they fit better with your terminal configuration
+- [x] Configurable color schemes: ability to change the default colors so they fit better with your terminal configuration
 
 ### Other planned features
 

@@ -34,6 +34,11 @@ def main():
         usage='%(prog)s [options] command',
         description='BashSenpai command-line interface.',
         epilog='\n'.join([
+            'available colors:',
+            '  black, white, gray, red, greeen, yellow, blue, magenta and cyan',
+            '  there are also brighter versions of each color, for example: "bright blue"',
+            '  you can also make colors bold, for example: "bold red" or "bold bright cyan"',
+            '',
             'valid commands:',
             '  <ask a question>',
             '  login',
@@ -47,8 +52,24 @@ def main():
     )
 
     action = parser.add_argument(
+        '--command-color',
+        type=str,
+        metavar='col',
+        nargs='+',
+        help='set color for the commands, check the "available colors" \
+              section for a list of all available options',
+    )
+
+    action = parser.add_argument(
+        '--comment-color',
+        type=str,
+        metavar='col',
+        nargs='+',
+        help='set color for the comments',
+    )
+
+    action = parser.add_argument(
         '-n', '--new',
-        required=False,
         action=argparse.BooleanOptionalAction,
         help='ignore previous history when sending a question',
     )
@@ -65,7 +86,7 @@ def main():
         'prompt',
         action='store',
         type=str,
-        nargs='+',
+        nargs='*',
         help='question to ask or command to execute',
     )
 
@@ -78,16 +99,45 @@ def main():
     senpai.config.set_value('prog', parser.prog)
     senpai.config.write()
 
+    # set colors
+    color_chunks = (
+        'bold', 'bright', 'black', 'white', 'gray', 'red',
+        'green', 'yellow', 'blue', 'magenta', 'cyan',
+    )
+
+    if args.command_color:
+        command_color = ' '.join(args.command_color)
+        command_color = command_color.lower().replace('grey', 'gray')
+        for chunk in command_color.split():
+            if not chunk in color_chunks:
+                print(f'Error! Can\'t parse "{chunk}".')
+                sys.exit(1)
+        senpai.config.set_value('command_color', command_color)
+        senpai.config.write()
+
+    if args.comment_color:
+        comment_color = ' '.join(args.comment_color)
+        comment_color = comment_color.lower().replace('grey', 'gray')
+        for chunk in comment_color.split():
+            if not chunk in color_chunks:
+                print(f'Error! Can\'t parse "{chunk}".')
+                sys.exit(1)
+        senpai.config.set_value('comment_color', comment_color)
+        senpai.config.write()
+
     # clear the previous user history
     if args.new:
         senpai.history.clear()
 
     # parse the prompt
+    if not args.prompt:
+        sys.exit(0)
+
     prompt = args.prompt[0]
     if prompt == 'login':
         if len(args.prompt) > 1:
             print('Error! The login command takes no extra arguments.')
-            sys.exit(1)
+            sys.exit(3)
 
         # read the auth token from the stdin and send a login request
         token = input('Auth token: ')
@@ -96,7 +146,7 @@ def main():
     elif prompt == 'become':
         if len(args.prompt) == 1:
             print('Error! Please provide the character you wish BashSenpai to impersonate.')
-            sys.exit(2)
+            sys.exit(4)
 
         persona = ' '.join(args.prompt[1:])
         senpai.config.set_value('persona', persona)

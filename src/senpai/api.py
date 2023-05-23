@@ -51,7 +51,7 @@ class API:
                 print('Error! Invalid token provided.')
             elif response['error']['code'] == 3:
                 print('Error! This user doesn\'t have a subscription.')
-            sys.exit(3)
+            sys.exit(5)
 
         # store the auth token in the config file
         self._config.set_value('token', token)
@@ -72,7 +72,7 @@ class API:
         if not token:
             prog = self._config.get_value('prog')
             print(f'You are not authenticated. First run:\n{prog} login')
-            sys.exit(4)
+            sys.exit(6)
 
         # send the question to our API
         response = POST(f'{self.HOST}/prompt/', json={

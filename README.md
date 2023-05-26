@@ -125,6 +125,8 @@ This command sends the question to the BashSenpai API and displays an informativ
 
 * `--comment-color`: sets the color of the comments in the responses.
 
+* `--run`, `--noi-run`: sets whether to show the menu prompt to execute each returned command.
+
 Please check our [Roadmap](#roadmap) section for new and planned features as we develop the configuration options. We are committed to making BashSenpai user-friendly, flexible and easily-configurable and we value your initial feedback. If you have any suggestions or feature requests, don't hesitate to use the appropriate tools provided by GitHub to share your thoughts with us.
 
 ## Contributing
@@ -147,17 +149,18 @@ This project is licensed under the Apache 2.0 License. See the [LICENSE](LICENSE
 
 ## Roadmap
 
-### Version 0.80
+### Version 0.80 (planned)
 
-- [ ] Extra context: provide extra optional information about your own environment to improve the results
-- [ ] Multi-language support: provided by ChatGPT. If you have interest in helping us improve these, open a new pull request
+- [ ] Better error handling: print better outputs when receiving an error from the API
+- [ ] Extra context: provide optional information about your own environment to improve the results
+- [ ] Multi-language support: provided by ChatGPT
 
-### Version 0.75 (planned)
+### Version 0.75 (finished)
 
 - [x] MacOS build: proper MacOS integration
 - [x] Windows build: native build script with an installer
-- [ ] Command execution: execute any provided list of commands directly in the terminal with an optional feature to edit each one beforehand
-- [x] Configurable color schemes: ability to change the default colors so they fit better with your terminal configuration
+- [x] Command execution: execute any provided list of commands directly in the terminal
+- [x] Configurable color schemes: change the default colors so they fit better with your terminal configuration
 
 ### Other planned features
 

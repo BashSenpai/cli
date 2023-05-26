@@ -34,7 +34,15 @@ def get_version() -> str:
 
 
 def main():
-    """Entry point of the BashSenpai command-line interface."""
+    """
+    Entry point of the BashSenpai command-line interface.
+
+    Parses the provided command line arguments and runs any provided commands.
+
+    """
+
+    # initialize bash senpai
+    senpai = BashSenpai()
 
     # parse any command-line arguments
     parser = argparse.ArgumentParser(
@@ -79,6 +87,13 @@ def main():
     )
 
     action = parser.add_argument(
+        '--run',
+        action=argparse.BooleanOptionalAction,
+        default=senpai.config.get_value('execute'),
+        help='show menu prompt to execute each returned command',
+    )
+
+    action = parser.add_argument(
         '-n', '--new',
         action=argparse.BooleanOptionalAction,
         help='ignore previous history when sending a question',
@@ -100,10 +115,8 @@ def main():
         help='question to ask or command to execute',
     )
 
+    # parse the arguments
     args = parser.parse_args()
-
-    # initialize bash senpai
-    senpai = BashSenpai()
 
     # store the app name in the config
     senpai.config.set_value('prog', parser.prog)
@@ -135,6 +148,13 @@ def main():
         senpai.config.set_value('comment_color', comment_color)
         senpai.config.write()
 
+    # whether to execute the provided commands
+    if args.run:
+        senpai.config.set_value('execute', True)
+    else:
+        senpai.config.set_value('execute', False)
+    senpai.config.write()
+
     # clear the previous user history
     if args.new:
         senpai.history.clear()
@@ -165,5 +185,4 @@ def main():
 
     else:
         question = ' '.join(args.prompt)
-        response = senpai.ask_question(question)
-        print(response)
+        senpai.ask_question(question)

@@ -44,6 +44,7 @@ class Config:
             'PROG': config['main'].get('prog', 'senpai'),
             'COMMAND_COLOR': config['main'].get('command_color', 'bold bright blue'),
             'COMMENT_COLOR': config['main'].get('comment_color', 'bright gray'),
+            'EXECUTE': config['main'].get('execute', True),
         }
 
     def get_value(self, setting: str) -> Union[str, None]:
@@ -59,12 +60,12 @@ class Config:
         """
         return self._config.get(setting.upper(), None)
 
-    def set_value(self, setting: str, value: str) -> None:
+    def set_value(self, setting: str, value: Union[str, bool]) -> None:
         """Set the value of a specific configuration setting.
 
         Args:
             setting (str): The name of the configuration setting.
-            value (str): The new value for the configuration setting.
+            value (str | bool): The new value for the configuration setting.
 
         """
         self._config[setting.upper()] = value
@@ -80,6 +81,7 @@ class Config:
                     'prog': self._config['PROG'],
                     'command_color': self._config['COMMAND_COLOR'],
                     'comment_color': self._config['COMMENT_COLOR'],
+                    'execute': self._config['EXECUTE'],
                 }
             }
             toml.dump(config_data, f)

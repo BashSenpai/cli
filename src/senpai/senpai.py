@@ -5,6 +5,8 @@ import sys
 from .api import API
 from .config import Config
 from .history import History
+from .menu import Menu
+from .lib.color import parse_color
 
 
 # default config storage based on OS type
@@ -14,37 +16,6 @@ elif sys.platform.startswith('darwin'):
     CONFIG_BASE = Path.home() / 'Library' / 'Application Support'
 else:  # linux, freebsd, etc.
     CONFIG_BASE = Path.home() / '.config'
-
-
-# dictionary of all 4-bit ANSI colors
-COLOR = {
-    'black':   ('30', '30'),
-    'white':   ('97', '97'),
-    'gray':    ('90', '37'),
-    'red':     ('31', '91'),
-    'green':   ('32', '92'),
-    'yellow':  ('33', '93'),
-    'blue':    ('34', '94'),
-    'magenta': ('35', '95'),
-    'cyan':    ('36', '96'),
-}
-
-def parse_color(color: str) -> str:
-    """Conver color name to ANSI-formatted string.
-
-    Args:
-        color (str): The color name to parse.
-
-    Returns:
-        str: ANSI-formatted string representing the color.
-
-    """
-
-    pos = 1 if 'bright' in color else 0
-    col_prefix = '\x1B[;1m' if 'bold' in color else ''
-    for col_name, col_values in COLOR.items():
-        if col_name in color:
-            return f'{col_prefix}\x1B[{col_values[pos]}m%s\x1B[0m'
 
 
 class BashSenpai:
@@ -57,13 +28,13 @@ class BashSenpai:
     responses. The API provides concise explanations and commands for Linux
     shell environments using ChatGPT as a backend.
 
-    The tool maintains a configuration file, user history, and uses ANSI escape
-    sequences for formatting the response output with colored text.
+    The tool maintains a configuration file, user history, can generate a menu
+    for executing the returned commands, and uses configurable colors converted
+    to ANSI-escaped sequences for formatting the response output.
 
     Usage:
     >>> senpai = BashSenpai()
-    >>> response = senpai.ask_question('How do I list files in a directory')
-    >>> print(response)
+    >>> senpai.ask_question('How do I list files in a directory')
 
     """
 
@@ -89,14 +60,14 @@ class BashSenpai:
         self.command_color = parse_color(self.config.get_value('command_color'))
         self.comment_color = parse_color(self.config.get_value('comment_color'))
 
-    def ask_question(self, question: str) -> str:
-        """Send a question to the BashSenpai API and return a formatted response.
+    def ask_question(self, question: str) -> None:
+        """
+        Send a question to the BashSenpai API and print a formatted response. If
+        the user has command execution enabled, generates a menu for executing
+        each command.
 
         Args:
             question (str): The question to send to the API.
-
-        Returns:
-            str: The response from the API formatted with huepy.
 
         """
 
@@ -107,16 +78,28 @@ class BashSenpai:
         self.history.add({'question': question, 'answer': response})
         self.history.write()
 
-        # format the response using huepy
+        # format the response and collect a list of commands
+        commands = list()
         formatted_response = '\n'
         for line in response.splitlines():
             if line.startswith('#'):
                 formatted_response += self.comment_color % line
             else:
                 chunks = line.split(' # ', maxsplit=1)  # handle in-line comments
+                if len(chunks[0].strip()) > 0:
+                    commands.append(chunks[0].strip())
                 formatted_response += self.command_color % chunks[0]
                 if len(chunks) > 1:
                     formatted_response += self.comment_color % f' # {chunks[1]}'
             formatted_response += '\n'
 
-        return formatted_response
+        # print the formatted response
+        print('\n' + formatted_response + '\n')
+
+        # if command execution is enabled, generate the menu and run it
+        if self.config.get_value('execute') and len(commands) > 0:
+            menu = Menu(
+                commands=commands,
+                colors=(self.command_color, self.comment_color),
+            )
+            menu.display()

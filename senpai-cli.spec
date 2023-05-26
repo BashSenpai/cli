@@ -41,13 +41,10 @@ BashSenpai is a terminal assistant powered by ChatGPT that transforms instructio
 
 
 %changelog
-* Fri May 27 2023 Bogdan Tatarov <bogdan@tatarov.me>
+* Fri May 27 2023 Bogdan Tatarov <bogdan@tatarov.me> 0.75b-1
 - Feature: menu to execute any provided command directly in the terminal
 * Mon May 22 2023 Bogdan Tatarov <bogdan@tatarov.me> 0.71b-1
 - various changes in metadata (bogdan@tatarov.me)
 - small bug fixes (bogdan@tatarov.me)
-  (bogdan@tatarov.me)
-
 * Mon May 22 2023 Bogdan Tatarov <bogdan@tatarov.me> 0.70b-1
-- First public release
-  (bogdan@tatarov.me)
+- First public release (bogdan@tatarov.me)

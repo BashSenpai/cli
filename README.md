@@ -71,7 +71,7 @@ Supported distributions: any Arch-based rolling-release distribution that suppor
 Install with Homebrew:
 
 ```shell
-brew tap BashSenpai/homebrew-core
+brew tap BashSenpai/core
 brew install senpai-cli
 ```
 

@@ -1,5 +1,4 @@
 import argparse
-from pathlib import Path
 import sys
 
 from .senpai import BashSenpai
@@ -15,22 +14,15 @@ class SimpleNargsFormatter(argparse.RawDescriptionHelpFormatter):
 
 # get __version__ from a file
 def get_version() -> str:
-    """Get the current version of the application by reading it from __init__.py
+    """Get the current version of the application from __init__.py
 
     Returns:
         str: The version of the application
 
     """
 
-    cur_dir = Path(__file__).parent.resolve()
-    with open(cur_dir / '__init__.py') as f:
-        filedata = f.read()
-    for line in filedata.splitlines():
-        if line.startswith('__version__'):
-            delim = '"' if '"' in line else "'"
-            return line.split(delim)[1]
-    else:
-        raise RuntimeError('Unable to find version string.')
+    from . import __version__
+    return __version__
 
 
 def main():

@@ -1,8 +1,7 @@
 import os
-import readline
 import subprocess
 
-from .lib.readchar import readkey, BASE_KEYS, SPECIFIC_KEYS
+from .lib.readchar import readkey, readinput, BASE_KEYS, SPECIFIC_KEYS
 
 
 class Menu:
@@ -91,16 +90,10 @@ class Menu:
         """Edit the current selected command from the command list."""
 
         self._clear_line()
-
-        readline.set_startup_hook(
-            lambda: readline.insert_text(self.commands[self.index])
+        self.commands[self.index] = readinput(
+            self.command_color % 'Edit command: ',
+            self.commands[self.index],
         )
-        try:
-            self.commands[self.index] = input(
-                self.command_color % 'Edit command: '
-            )
-        finally:
-            readline.set_startup_hook()
 
     def execute(self) -> None:
         """Execute the current selected command from the command list."""
@@ -154,5 +147,5 @@ class Menu:
     def _print_separator(self) -> None:
         """Prints a line separator."""
 
-        _, terminal_size = os.popen('stty size', 'r').read().split()
-        print(self.comment_color % '-' * int(terminal_size))
+        terminal_size = os.get_terminal_size().columns
+        print(self.comment_color % '-' * terminal_size)

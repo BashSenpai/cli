@@ -1,10 +1,13 @@
 # Initial code is borrowed from python-readchar:
 # https://github.com/magmax/python-readchar
 import sys
-import termios
 
 if sys.platform in ('win32', 'cygwin'):
     import msvcrt
+    import win32console
+else:
+    import readline
+    import termios
 
 
 class BASE_KEYS:
@@ -53,6 +56,45 @@ def readchar() -> str:
     return ch
 
 
+def readinput(prompt: str, default: str) -> str:
+    """
+    Reads user input with an extra default value provided and returns the result.
+
+    Args:
+        prompt (str): The default prompt to show when reading the input.
+        default: The default value to set for editing.
+
+    Returns:
+        str: The value read from the user input.
+
+    """
+
+    # handle windows
+    if sys.platform in ('win32', 'cygwin'):
+        _stdin = win32console.GetStdHandle(win32console.STD_INPUT_HANDLE)
+
+        keys = []
+        for c in str(default):
+            evt = win32console.PyINPUT_RECORDType(win32console.KEY_EVENT)
+            evt.Char = c
+            evt.RepeatCount = 1
+            evt.KeyDown = True
+            keys.append(evt)
+
+        _stdin.WriteConsoleInput(keys)
+        return input(prompt)
+
+    # handle linux and macos
+    readline.set_startup_hook(
+        lambda: readline.insert_text(default)
+    )
+    try:
+        result = input(prompt)
+    finally:
+        readline.set_startup_hook()
+    return result
+
+
 def readkey() -> str:
     """
     Reads the next keypress. If an escaped key is pressed, the full sequence is
@@ -68,7 +110,7 @@ def readkey() -> str:
     # handle for windows
     if sys.platform in ('win32', 'cygwin'):
         # if it is a normal character:
-        if c1 != '\x00\xE0':
+        if c1 not in '\x00\xE0':
             return c1
 
         # if it is a scpeal key, read second half:

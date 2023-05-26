@@ -3,8 +3,8 @@ class SenpaiCli < Formula
 
   desc "BashSenpai command-line interface"
   homepage "https://bashsenpai.com/"
-  url "https://github.com/BashSenpai/cli/archive/refs/tags/v0.71b.tar.gz"
-  sha256 "62cdde3f538589625af707ffa6cfa77fcb00a923fc381cc442b6da7b8945ac25"
+  url "https://github.com/BashSenpai/cli/archive/refs/tags/v0.75b.tar.gz"
+  sha256 "0b36a611f6f50ca93b6ba343549bd6e455ec56cad4140f6982228b1873cdb209"
   license "Apache-2.0"
 
   depends_on "python@3.11"

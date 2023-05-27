@@ -51,11 +51,12 @@ class Menu:
         self._print_header()
         self._print_newlines()
 
+        self.extra_lines = 0
         while True:
             # get the terminal width on each step
             self.terminal_size = os.get_terminal_size().columns
 
-            for _ in range(len(self.commands) + 2):
+            for _ in range(len(self.commands) + 2 + self.extra_lines):
                 self._clear_line()
 
             for index, command in enumerate(self.commands):
@@ -69,10 +70,16 @@ class Menu:
                     print(self.comment_color % f'[ ] {command}')
 
             self._print_separator()
+
+            prompt_prefix = 'Command to run: '
             print(
-                self.command_color % f'Command to run: ' + \
+                self.command_color % prompt_prefix + \
                 self.comment_color % self.commands[self.index]
             )
+
+            # extra lines to clear if the prompt goes on more lines
+            prompt_len = len(self.commands[self.index]) + len(prompt_prefix)
+            self.extra_lines = (prompt_len - 1) // self.terminal_size
 
             # handle user input
             key = readkey()
@@ -98,20 +105,29 @@ class Menu:
     def edit(self) -> None:
         """Edit the current selected command from the command list."""
 
-        self._clear_line()
+        for _ in range(1 + self.extra_lines):
+            self._clear_line()
+
+        prompt_prefix = 'Edit command: '
         self.commands[self.index] = readinput(
-            self.command_color % 'Edit command: ',
+            self.command_color % prompt_prefix,
             self.commands[self.index],
         )
 
+        # extra lines to clear if the prompt goes on more lines
+        prompt_len = len(self.commands[self.index]) + len(prompt_prefix)
+        self.extra_lines = (prompt_len - 1) // self.terminal_size
+
     def execute(self) -> None:
         """Execute the current selected command from the command list."""
+
+        for _ in range(1 + self.extra_lines):
+            self._clear_line()
 
         # get current command
         command = self.commands.pop(self.index)
 
         # print the execute prompt line
-        self._clear_line()
         print(
             self.command_color % f'Execute command: ' + \
             self.comment_color % command

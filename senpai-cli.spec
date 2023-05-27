@@ -1,5 +1,5 @@
 Name:           senpai-cli
-Version:        0.75b
+Version:        0.77b
 Release:        1%{?dist}
 Summary:        BashSenpai command-line interface
 
@@ -41,6 +41,8 @@ BashSenpai is a terminal assistant powered by ChatGPT that transforms instructio
 
 
 %changelog
+* Sat May 27 2023 Bogdan Tatarov <bogdan@tatarov.me> 0.77b-1
+- Feature: better error handling on API error (bogdan@tatarov.me)
 * Fri May 27 2023 Bogdan Tatarov <bogdan@tatarov.me> 0.75b-1
 - Feature: menu to execute any provided command directly in the terminal
 * Mon May 22 2023 Bogdan Tatarov <bogdan@tatarov.me> 0.71b-1

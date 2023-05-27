@@ -1,4 +1,3 @@
-import json
 from pathlib import Path
 import os
 import platform
@@ -92,11 +91,11 @@ class API:
         try:
             return response.json()
         except:
-            return json.dumps({
+            return {
                 'error': True,
                 'type': 'server',
                 'message': 'Unknown server error occured',
-            })
+            }
 
     def get_metadata(self) -> Union[dict[str, str], None]:
         """

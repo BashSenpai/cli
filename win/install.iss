@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "BashSenpai CLI"
-#define MyAppVersion "0.72b"
+#define MyAppVersion "0.77b"
 #define MyAppPublisher "Bash Senpai"
 #define MyAppURL "https://bashsenpai.com/"
 #define MyAppExeName "senpai.exe"

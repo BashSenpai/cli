@@ -3,8 +3,8 @@ class SenpaiCli < Formula
 
   desc "BashSenpai command-line interface"
   homepage "https://bashsenpai.com/"
-  url "https://github.com/BashSenpai/cli/archive/refs/tags/v0.75b.tar.gz"
-  sha256 "0b36a611f6f50ca93b6ba343549bd6e455ec56cad4140f6982228b1873cdb209"
+  url "https://github.com/BashSenpai/cli/archive/refs/tags/v0.76b.tar.gz"
+  sha256 "0142572878c5eab6480e71068da90257feab75f5b851a4e70b518dbad1ee16fd"
   license "Apache-2.0"
 
   depends_on "python@3.11"
@@ -17,6 +17,11 @@ class SenpaiCli < Formula
   resource "charset-nomalizer" do
     url "https://files.pythonhosted.org/packages/ff/d7/8d757f8bd45be079d76309248845a04f09619a7b17d6dfc8c9ff6433cac2/charset-normalizer-3.1.0.tar.gz"
     sha256 "34e0a2f9c370eb95597aae63bf85eb5e96826d81e3dcf88b8886012906f509b5"
+  end
+
+  resource "gnureadline" do
+    url "https://files.pythonhosted.org/packages/f2/e8/48c0162a732522c7b4568da35ed07d0db07d725f640676b4c9a8ec874d1a/gnureadline-8.1.2.tar.gz"
+    sha256 "4262a6aa356ab22ef642f43a7f94eb42a72d6f0c532edb4e8c6b933f573056d2"
   end
 
   resource "idna" do

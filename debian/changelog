@@ -1,3 +1,9 @@
+senpai-cli (0.79b) lunar; urgency=medium
+
+  * Feature: send optional metadata about the user's environment
+
+ -- Bogdan Tatarov <bogdan@tatarov.me>  Sat, 27 May 2023 21:36:00 +0300
+
 senpai-cli (0.78b-1) lunar; urgency=medium
 
   * Fix: handle internal server errors on API calls

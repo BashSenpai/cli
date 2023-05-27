@@ -1,3 +1,9 @@
+senpai-cli (0.77b) lunar; urgency=medium
+
+  * Feature: handle various response errors from the API
+
+ -- Bogdan Tatarov <bogdan@tatarov.me>  Sat, 27 May 2023 07:47:00 +0300
+
 senpai-cli (0.75b) lunar; urgency=medium
 
   * Feature: menu to execute any provided command directly in the terminal

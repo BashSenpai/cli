@@ -1,3 +1,5 @@
+import sys
+
 # dictionary of all 4-bit ANSI colors
 COLOR = {
     'black':   ('30', '30'),
@@ -26,4 +28,9 @@ def parse_color(color: str) -> str:
     col_prefix = '\1\x1B[;1m\2' if 'bold' in color else ''
     for col_name, col_values in COLOR.items():
         if col_name in color:
-            return f'{col_prefix}\1\x1B[{col_values[pos]}m\2%s\1\x1B[0m\2'
+            color = f'{col_prefix}\1\x1B[{col_values[pos]}m\2%s\1\x1B[0m\2'
+
+            if sys.platform in ('win32', 'cygwin'):
+                color = color.replace('\1', '').replace('\2', '')
+
+            return color

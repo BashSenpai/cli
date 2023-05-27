@@ -1,3 +1,4 @@
+import json
 from requests import post as POST
 import sys
 
@@ -83,4 +84,11 @@ class API:
             'question': question,
             'history': self._history.get_history(),
         })
-        return response.json()
+        try:
+            return response.json()
+        except:
+            return json.dumps({
+                'error': True,
+                'type': 'server',
+                'message': 'Unknown server error occured',
+            })

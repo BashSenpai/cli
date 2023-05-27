@@ -82,8 +82,8 @@ class BashSenpai:
             if error_type == 'auth':
                 print(f'Run first: {prog} login')
                 sys.exit(6)
-            elif error_type == 'timeout':
-                print('Try running the same command again in a moment.')
+            elif error_type in ['timeout', 'server']:
+                print('Try running the same command again a little later.')
                 sys.exit(7)
             elif error_type == 'history':
                 print(f'Try running: {prog} -n <question>')

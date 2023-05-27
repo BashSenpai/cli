@@ -125,7 +125,7 @@ This command sends the question to the BashSenpai API and displays an informativ
 
 * `--comment-color`: sets the color of the comments in the responses.
 
-* `--run`, `--noi-run`: sets whether to show the menu prompt to execute each returned command.
+* `--run`, `--no-run`: sets whether to show the menu prompt to execute each returned command.
 
 Please check our [Roadmap](#roadmap) section for new and planned features as we develop the configuration options. We are committed to making BashSenpai user-friendly, flexible and easily-configurable and we value your initial feedback. If you have any suggestions or feature requests, don't hesitate to use the appropriate tools provided by GitHub to share your thoughts with us.
 

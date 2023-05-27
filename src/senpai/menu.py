@@ -134,7 +134,7 @@ class Menu:
         print(
             self.command_color % '[?] ' + \
             self.comment_color %
-                'Press [Enter] to execute, [E] to edit, or [Q] to abort.'
+                'Press [Enter] to execute, [E] to edit, or [Q] to exit.'
         )
         self._print_separator()
 

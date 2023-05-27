@@ -83,4 +83,4 @@ class API:
             'question': question,
             'history': self._history.get_history(),
         })
-        return response.text
+        return response.json()

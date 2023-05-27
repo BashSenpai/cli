@@ -74,14 +74,40 @@ class BashSenpai:
         # send an API call with the question and get a plain-text response
         response = self.api.question(question)
 
-        # write the new question/answer pair in the user history
-        self.history.add({'question': question, 'answer': response})
+        if response.get('error', False):
+            print('Error! %s.' % response.get('message'))
+
+            prog = self.config.get_value('prog')
+            error_type = response.get('type', None)
+            if error_type == 'auth':
+                print(f'Run first: {prog} login')
+                sys.exit(6)
+            elif error_type == 'timeout':
+                print('Try running the same command again in a moment.')
+                sys.exit(7)
+            elif error_type == 'history':
+                print(f'Try running: {prog} -n <question>')
+                sys.exit(8)
+            sys.exit(9)  # Unknown error
+
+        # write the new question/persona pair in the user history
+        self.history.add({
+            'question': question,
+            'answer': response.get('response', ''),
+            'persona': response.get('persona', None),
+        })
         self.history.write()
+
+        # determine whether to show the regular response or the persona one
+        response_text = response.get('response', '')
+        persona_text = response.get('persona', None)
+        if persona_text:
+            response_text = persona_text
 
         # format the response and collect a list of commands
         commands = list()
         formatted_response = '\n'
-        for line in response.splitlines():
+        for line in response_text.splitlines():
             if line.startswith('#'):
                 formatted_response += self.comment_color % line
             else:
@@ -94,7 +120,7 @@ class BashSenpai:
             formatted_response += '\n'
 
         # print the formatted response
-        print('\n' + formatted_response + '\n')
+        print(formatted_response)
 
         # if command execution is enabled, generate the menu and run it
         if self.config.get_value('execute') and len(commands) > 0:

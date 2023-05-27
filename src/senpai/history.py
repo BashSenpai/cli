@@ -14,7 +14,9 @@ class History:
 
     Usage:
     >>> history = History(path=Path('/path/to/history'))
-    >>> history.add({'question': 'how do I list files', 'answer': 'ls -l'})
+    >>> history.add({
+    >>>     'question': 'how do I list files', 'answer': 'ls -l', 'persona': ''
+    >>> })
     >>> history.write()
     >>> prompts = history.get_history()
     >>> print(prompts)

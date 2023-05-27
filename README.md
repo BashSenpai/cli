@@ -14,7 +14,7 @@ BashSenpai is a command-line tool that brings the power of the BashSenpai API to
 ## Features
 
 - Supercharged by ChatGPT.
-- Refined prompts that take advantage of a multi-step self-refletion process for best possible results.
+- Refined prompts that take advantage of a multi-step self-reflection process for best possible results.
 - Ask follow-up questions without providing any context; our API takes care of including your log history.
 - Always get answers that can be run directly in the terminal along with helpful comment explanations.
 - Menu prompt after each response to run any of the provided commands with the ability to edit them first.
@@ -60,7 +60,7 @@ Supported distributions: **Fedora 38**, **RHEL 9**, **CentOS Stream 9**.
 
 ### Arch Linux-based
 
-Install from AUR:
+Install from the AUR:
 
 ```shell
 yay -S senpai-cli
@@ -111,7 +111,7 @@ This command prompts you to enter your authentication token and stores it in the
 senpai become angry pirate
 ```
 
-This command changes the persona of BashSenpai to an angry pirate, adding a fun twist to the responses. You are not limitted to a certain list of characters and can write anything you want here. Our smartly-designed backend API with multi-level prompts and instructions makes sure all crazy ideas can integrate nicely with the core functionality of the tool.
+This command changes the persona of BashSenpai to an angry pirate, adding a fun twist to the responses. You are not limited to a certain list of characters and can write anything you want here. Our smartly-designed backend API with multi-level prompts and instructions makes sure all crazy ideas can integrate nicely with the core functionality of the tool.
 
 * Ask a question:
 
@@ -123,7 +123,7 @@ This command sends the question to the BashSenpai API and displays an informativ
 
 ## Configuration
 
-* `--command-color`: sets the color of the commands in the responses. Valid options are: black, white, gray, red, greeen, yellow, blue, magenta and cyan. There are also brighter versions of each color, for example: "bright blue". You can also make colors bold, for example: "bold red" or "bold bright cyan".
+* `--command-color`: sets the color of the commands in the responses. Valid options are: black, white, gray, red, green, yellow, blue, magenta and cyan. There are also brighter versions of each color, for example: "bright blue". You can also make colors bold, for example: "bold red" or "bold bright cyan".
 
 * `--comment-color`: sets the color of the comments in the responses.
 

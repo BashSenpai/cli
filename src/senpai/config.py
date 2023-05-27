@@ -45,6 +45,7 @@ class Config:
             'COMMAND_COLOR': config['main'].get('command_color', 'bold bright blue'),
             'COMMENT_COLOR': config['main'].get('comment_color', 'bright gray'),
             'EXECUTE': config['main'].get('execute', True),
+            'METADATA': config['main'].get('metadata', True),
         }
 
     def get_value(self, setting: str) -> Union[str, None]:
@@ -82,6 +83,7 @@ class Config:
                     'command_color': self._config['COMMAND_COLOR'],
                     'comment_color': self._config['COMMENT_COLOR'],
                     'execute': self._config['EXECUTE'],
+                    'metadata': self._config['METADATA'],
                 }
             }
             toml.dump(config_data, f)

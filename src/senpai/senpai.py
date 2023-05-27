@@ -10,9 +10,9 @@ from .lib.color import parse_color
 
 
 # default config storage based on OS type
-if sys.platform.startswith('win'):
+if sys.platform in ('win32', 'cygwin'):
     CONFIG_BASE = Path(os.path.normpath(os.getenv('LOCALAPPDATA')))
-elif sys.platform.startswith('darwin'):
+elif sys.platform in ('darwin',):
     CONFIG_BASE = Path.home() / 'Library' / 'Application Support'
 else:  # linux, freebsd, etc.
     CONFIG_BASE = Path.home() / '.config'

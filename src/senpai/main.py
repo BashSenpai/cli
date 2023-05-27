@@ -63,6 +63,13 @@ def main():
     )
 
     action = parser.add_argument(
+        '-n', '--new',
+        action=argparse.BooleanOptionalAction,
+        help='ignore previous history when sending a question',
+    )
+    action.option_strings.remove('--no-new')
+
+    action = parser.add_argument(
         '--command-color',
         type=str,
         metavar='col',
@@ -80,18 +87,18 @@ def main():
     )
 
     action = parser.add_argument(
+        '--meta',
+        action=argparse.BooleanOptionalAction,
+        default=senpai.config.get_value('metadata'),
+        help='send information about your OS to imporove the responses',
+    )
+
+    action = parser.add_argument(
         '--run',
         action=argparse.BooleanOptionalAction,
         default=senpai.config.get_value('execute'),
         help='show menu prompt to execute each returned command',
     )
-
-    action = parser.add_argument(
-        '-n', '--new',
-        action=argparse.BooleanOptionalAction,
-        help='ignore previous history when sending a question',
-    )
-    action.option_strings.remove('--no-new')
 
     parser.add_argument(
         '-v', '--version',
@@ -147,6 +154,13 @@ def main():
                 sys.exit(1)
         senpai.config.set_value('comment_color', comment_color)
         senpai.config.write()
+
+    # whether to send OS metadata
+    if args.meta:
+        senpai.config.set_value('metadata', True)
+    else:
+        senpai.config.set_value('metadata', False)
+    senpai.config.write()
 
     # whether to execute the provided commands
     if args.run:

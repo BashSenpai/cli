@@ -127,6 +127,8 @@ This command sends the question to the BashSenpai API and displays an informativ
 
 * `--run`, `--no-run`: sets whether to show the menu prompt to execute each returned command.
 
+* `--meta`, `--no-meta`: sets whether to send OS metadata to improve the responses. Currently this includes OS type and version (all OSes), shell type (macOS and Linux), and architecture (macOS). Users may choose to disable this feature either for privacy reasons, or in cases where it produces unwanted results (for example if the tool is running on a Windows machine, but the user expects answers about Linux).
+
 Please check our [Roadmap](#roadmap) section for new and planned features as we develop the configuration options. We are committed to making BashSenpai user-friendly, flexible and easily-configurable and we value your initial feedback. If you have any suggestions or feature requests, don't hesitate to use the appropriate tools provided by GitHub to share your thoughts with us.
 
 ## Contributing
@@ -152,7 +154,7 @@ This project is licensed under the Apache 2.0 License. See the [LICENSE](LICENSE
 ### Version 0.80 (planned)
 
 - [x] Better error handling: print better output on receiving an error from the API
-- [ ] Extra context: provide optional information about your own environment to improve the results
+- [x] Extra context: provide optional information about your own environment to improve the results
 - [ ] Multi-language support: provided by ChatGPT
 
 ### Version 0.75 (finished)

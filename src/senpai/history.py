@@ -43,7 +43,7 @@ class History:
             with open(self.path, 'r') as f:
                 self._history = json.load(f)
 
-    def add(self, prompt: dict[str: str]) -> None:
+    def add(self, prompt: dict[str, str]) -> None:
         """Add a new prompt to the user history.
 
         Args:

@@ -1,6 +1,10 @@
 import json
+from pathlib import Path
+import os
+import platform
 from requests import post as POST
 import sys
+from typing import Union
 
 from .config import Config
 from .history import History
@@ -83,6 +87,7 @@ class API:
             'persona': self._config.get_value('persona'),
             'question': question,
             'history': self._history.get_history(),
+            'metadata': self.get_metadata(),
         })
         try:
             return response.json()
@@ -92,3 +97,52 @@ class API:
                 'type': 'server',
                 'message': 'Unknown server error occured',
             })
+
+    def get_metadata(self) -> Union[dict[str, str], None]:
+        """
+        Gets user system information to include with the prompt. The user may
+        disable this functionality for privacy or other reasons.
+
+        Returns:
+            dict or None: The dictionary containing the metadata.
+        """
+
+        if not self._config.get_value('metadata'):
+            return None
+
+        metadata = dict()
+
+        if sys.platform in ('win32', 'cygwin'):  # windows
+            metadata['os'] = 'Windows'
+            metadata['version'] = platform.win32_ver()[0]
+
+        elif sys.platform in ('darwin',):  # macos
+            mac_ver = platform.mac_ver()
+            metadata['os'] = 'macOS'
+            metadata['version'] = mac_ver[0]
+            metadata['arch'] = mac_ver[-1]
+            metadata['shell'] = os.environ.get('SHELL', None)
+
+        else:  # linux, freebsd, etc.
+            metadata['os'] = 'Linux'
+            metadata['version'] = None
+
+            # raw-parse os-release as python 3.9 lacks freedesktop_os_release
+            os_release_path = Path('/etc/os-release')
+            if not os_release_path.exists():
+                os_release_path = Path('/usr/lib/os-release')
+                if not os_release_path.exists():
+                    os_release_path = None
+
+            if os_release_path:
+                with open(os_release_path) as f:
+                    os_release = f.read()
+
+                for line in os_release.splitlines():
+                    line = line.strip()
+                    if line.upper().startswith('PRETTY_NAME'):
+                        metadata['version'] = line.split('=')[1].strip('"\'')
+
+            metadata['shell'] = os.environ.get('SHELL', None)
+
+        return metadata

@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from .lib.readchar import readkey, readinput, BASE_KEYS, SPECIFIC_KEYS
+from .lib.user_input import readkey, readinput, BASE_KEYS, SPECIFIC_KEYS
 
 
 class Menu:

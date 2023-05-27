@@ -6,7 +6,10 @@ if sys.platform in ('win32', 'cygwin'):
     import msvcrt
     import win32console
 else:
-    import readline
+    try:
+        import gnureadline as readline  # macos
+    except:
+        import readline  # linux
     import termios
 
 

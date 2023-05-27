@@ -12,9 +12,10 @@ class SimpleNargsFormatter(argparse.RawDescriptionHelpFormatter):
         return '%s' % get_metavar(1)
 
 
-# get __version__ from a file
+# get __version__ from __init__.py
 def get_version() -> str:
-    """Get the current version of the application from __init__.py
+    """
+    Get the current version of the application from __init__.py.
 
     Returns:
         str: The version of the application
@@ -47,10 +48,10 @@ def main():
             '  there are also brighter versions of each color, for example: "bright blue"',
             '  you can also make colors bold, for example: "bold red" or "bold bright cyan"',
             '',
-            'valid commands:',
+            'available commands:',
             '  <ask a question>',
             '  login',
-            '  become <character>   # use "default" to revert back to normal messages',
+            '  become <persona>     # use "default" to revert back to normal messages',
             '',
             'example usage:',
             '  %(prog)s become angry pirate',
@@ -104,8 +105,15 @@ def main():
         action='store',
         type=str,
         nargs='*',
+        metavar='<prompt>',
         help='question to ask or command to execute',
     )
+
+    # check for empty arguments first
+    if len(sys.argv) < 2:
+        print('Error! No arguments provided. For list of available options, run:')
+        print(f'{parser.prog} --help')
+        sys.exit(-1)
 
     # parse the arguments
     args = parser.parse_args()
@@ -167,7 +175,7 @@ def main():
 
     elif prompt == 'become':
         if len(args.prompt) == 1:
-            print('Error! Please provide the character you wish BashSenpai to impersonate.')
+            print('Error! Please provide the persona you wish BashSenpai to use.')
             sys.exit(4)
 
         persona = ' '.join(args.prompt[1:])

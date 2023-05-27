@@ -36,6 +36,8 @@ class Menu:
         self.command_color = colors[0]
         self.comment_color = colors[1]
 
+        self.terminal_size = os.get_terminal_size().columns
+
     def display(self) -> None:
         """
         Handles drawing the manu and handling all user input. Users can edit or
@@ -50,10 +52,17 @@ class Menu:
         self._print_newlines()
 
         while True:
+            # get the terminal width on each step
+            self.terminal_size = os.get_terminal_size().columns
+
             for _ in range(len(self.commands) + 2):
                 self._clear_line()
 
             for index, command in enumerate(self.commands):
+                # truncate longer commands
+                if len(command) > self.terminal_size - 5:
+                    command = f'{command[:self.terminal_size - 8]}...'
+
                 if index == self.index:
                     print(self.command_color % f'[>] {command}')
                 else:
@@ -125,7 +134,7 @@ class Menu:
     def _clear_line(self) -> None:
         """Clears any text from the last line."""
 
-        print(f'\33[1A\33[2K\r', end='')
+        print(f'\x1B[1A\x1B[2K\r', end='')
 
     def _print_header(self) -> None:
         """Prints the header of the menu."""
@@ -147,5 +156,4 @@ class Menu:
     def _print_separator(self) -> None:
         """Prints a line separator."""
 
-        terminal_size = os.get_terminal_size().columns
-        print(self.comment_color % '-' * terminal_size)
+        print(self.comment_color % '-' * self.terminal_size)

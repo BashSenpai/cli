@@ -23,7 +23,7 @@ def parse_color(color: str) -> str:
     """
 
     pos = 1 if 'bright' in color else 0
-    col_prefix = '\x1B[;1m' if 'bold' in color else ''
+    col_prefix = '\1\x1B[;1m\2' if 'bold' in color else ''
     for col_name, col_values in COLOR.items():
         if col_name in color:
-            return f'{col_prefix}\x1B[{col_values[pos]}m%s\x1B[0m'
+            return f'{col_prefix}\1\x1B[{col_values[pos]}m\2%s\1\x1B[0m\2'

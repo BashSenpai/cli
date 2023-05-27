@@ -85,7 +85,7 @@ def readinput(prompt: str, default: str) -> str:
             keys.append(evt)
 
         _stdin.WriteConsoleInput(keys)
-        return input(prompt)
+        return input()
 
     # handle linux and macos
     readline.set_startup_hook(

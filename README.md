@@ -26,7 +26,7 @@ BashSenpai is a command-line tool that utilizes the power of ChatGPT, bringing i
 
 - [Installation](#-installation)
 - [Usage](#️-usage)
-- [Configuration](#️-configuration)
+- [Options](#️-options)
 - [Contributing](#-contributing)
 - [License](#-license)
 - [Roadmap](#️-roadmap)
@@ -90,11 +90,7 @@ To use BashSenpai, run the following command:
 senpai [options] prompt
 ```
 
-The `prompt` argument represents the question or a special command you wish to execute. BashSenpai sends the prompt to the BashSenpai API and displays the response in your terminal.
-
-### Options
-
-* `-n, --new`: excludes any preceding history when asking a question. Use this option to initiate a new context.
+The `prompt` argument represents the question you want to ask or a special command you wish to execute. BashSenpai sends the prompt to the BashSenpai API and displays the response in your terminal.
 
 ### Examples
 
@@ -104,7 +100,7 @@ The `prompt` argument represents the question or a special command you wish to e
 senpai login
 ```
 
-This command prompts you to enter authentication token, storing it in the configuration file.
+This command prompts you to enter an authentication token, storing it in the configuration file.
 
 * Change the persona of BashSenpai:
 
@@ -122,15 +118,19 @@ senpai how to disable SSH connections
 
 This command sends the question to the BashSenpai API and displays an informative and well-formatted response.
 
-## ⚙️ Configuration
+## ⚙️ Options
 
 * `--command-color`: sets the color of the commands in the responses. Valid options are: black, white, gray, red, green, yellow, blue, magenta and cyan. Brighter versions of each color are available, for example: "bright blue". You can also bold colors, for example: "bold red" or "bold bright cyan".
 
 * `--comment-color`: sets the color of the comments in the responses.
 
+* `--meta`, `--no-meta`: determines whether to send OS metadata to refine the responses. This includes OS type and version (all OSes), shell type (macOS and Linux), and architecture (macOS). Users can choose to disable this feature for privacy reasons, or in cases where it yields undesired results (for example if the tool is operating on a Windows machine, but the user expects answers about Linux).
+
+* `-n, --new`: excludes any preceding history when asking a question. Use this option to initiate a new context.
+
 * `--run`, `--no-run`: controls whether to display the menu prompt to execute each returned command.
 
-* `--meta`, `--no-meta`: determines whether to send OS metadata to refine the responses. This includes OS type and version (all OSes), shell type (macOS and Linux), and architecture (macOS). Users can choose to disable this feature for privacy reasons, or in cases where it yields undesired results (for example if the tool is operating on a Windows machine, but the user expects answers about Linux).
+* `-v`, `--version`: shows current version number.
 
 Check our [Roadmap](#roadmap) section for new and upcoming features as we develop the configuration options. We are committed to making BashSenpai user-friendly, flexible, and easily-configurable, and we value your initial feedback. If you have any suggestions or feature requests, don't hesitate to use the appropriate tools provided by GitHub to share your ideas with us.
 

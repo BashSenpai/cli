@@ -72,4 +72,5 @@ class History:
         """Write the current user history to the history log file."""
 
         with open(self.path, 'w') as f:
-            json.dump(self._history[-5:], f)  # limit to latest 5 prompts only
+            # limit to latest 5 prompts only
+            json.dump(self._history[-5:], f)

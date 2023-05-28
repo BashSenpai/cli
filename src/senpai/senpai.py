@@ -163,7 +163,7 @@ class BashSenpai:
             if char.isprintable():
                 time.sleep(0.0085)
         print('')
-        time.sleep(0.66)
+        time.sleep(0.55)
 
         # if command execution is enabled, generate the menu and run it
         if self.config.get_value('execute') and len(commands) > 0:

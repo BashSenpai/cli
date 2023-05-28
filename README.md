@@ -1,6 +1,6 @@
 # BashSenpai
 
-BashSenpai is a command-line tool that brings the power of the BashSenpai API to your terminal. It allows you to ask questions and receive informative responses related to shell scripting, making it a valuable resource for both beginners and experienced users.
+BashSenpai is a command-line tool that utilizes the power of ChatGPT, bringing it straight to your terminal. You can ask questions and receive insightful responses related to shell scripting, making it an indispensable asset for both beginners and seasoned users alike.
 
 <div align="center">
     <br>
@@ -11,29 +11,30 @@ BashSenpai is a command-line tool that brings the power of the BashSenpai API to
 </p>
 
 
-## Features
+## 🎯 Features
 
-- Supercharged by ChatGPT.
-- Refined prompts that take advantage of a multi-step self-reflection process for best possible results.
-- Ask follow-up questions without providing any context; our API takes care of including your log history.
-- Always get answers that can be run directly in the terminal along with helpful comment explanations.
-- Menu prompt after each response to run any of the provided commands with the ability to edit them first.
-- Send optional information about the OS you are running to improve the responses for generic questions.
+- Powered by ChatGPT.
+- Refined prompts employing a multi-step self-reflection process for the most optimal results.
+- Receive answers executable directly in the terminal, complemented with instructive comment explanations.
+- Ask follow-up questions without providing any context; our API will include your log history.
+- Menu prompt after each response, enabling you to run any provided commands, or modify if needed.
+- Share optional information about the OS you are using to enhance the responses for general queries.
 - Nicely formatted answers with customizable colors for improved readability.
-- Change the persona of BashSenpai to add a touch of fun and personality to your interactions.
+- Modify the persona of BashSenpai, adding a touch of fun and personality to your interactions.
 
-## Table of Contents
+## 📖 Table of Contents
 
-- [Installation](#installation)
-- [Usage](#usage)
-- [Configuration](#configuration)
-- [Contributing](#contributing)
-- [License](#license)
-- [Roadmap](#roadmap)
+- [Installation](#-installation)
+- [Usage](#️-usage)
+- [Configuration](#️-configuration)
+- [Contributing](#-contributing)
+- [License](#-license)
+- [Roadmap](#️-roadmap)
+- [Maintainers](#-maintainers)
 
-## Installation
+## 💻 Installation
 
-We maintain up-to-date packages for the following Operating Systems and Linux distributions:
+We ensure up-to-date packages for the following Operating Systems and Linux distributions:
 
 ### Ubuntu-based
 
@@ -81,7 +82,7 @@ brew install senpai-cli
 
 Download: **[Installer](https://bashsenpai.com/latest/BashSenpaiSetup.exe)**.
 
-## Usage
+## ⌨️ Usage
 
 To use BashSenpai, run the following command:
 
@@ -89,11 +90,11 @@ To use BashSenpai, run the following command:
 senpai [options] prompt
 ```
 
-The `prompt` argument represents the question or a special command you want to execute. BashSenpai will send the prompt to the BashSenpai API and display the response in your terminal.
+The `prompt` argument represents the question or a special command you wish to execute. BashSenpai sends the prompt to the BashSenpai API and displays the response in your terminal.
 
 ### Options
 
-* `-n, --new`: ignores the previous history when sending a question. Use this option if you want to start fresh with each prompt.
+* `-n, --new`: excludes any preceding history when asking a question. Use this option to initiate a new context.
 
 ### Examples
 
@@ -103,7 +104,7 @@ The `prompt` argument represents the question or a special command you want to e
 senpai login
 ```
 
-This command prompts you to enter your authentication token and stores it in the configuration file.
+This command prompts you to enter authentication token, storing it in the configuration file.
 
 * Change the persona of BashSenpai:
 
@@ -111,7 +112,7 @@ This command prompts you to enter your authentication token and stores it in the
 senpai become angry pirate
 ```
 
-This command changes the persona of BashSenpai to an angry pirate, adding a fun twist to the responses. You are not limited to a certain list of characters and can write anything you want here. Our smartly-designed backend API with multi-level prompts and instructions makes sure all crazy ideas can integrate nicely with the core functionality of the tool.
+This command alters BashSenpai's persona to an angry pirate, infusing a fun twist into the responses. You are not confined to a specific list of characters and can input anything you desire. Our ingeniously designed backend API, equipped with multi-level prompts and instructions, ensures all eccentric ideas are nicely integrated with the core functionality of the tool.
 
 * Ask a question:
 
@@ -121,43 +122,43 @@ senpai how to disable SSH connections
 
 This command sends the question to the BashSenpai API and displays an informative and well-formatted response.
 
-## Configuration
+## ⚙️ Configuration
 
-* `--command-color`: sets the color of the commands in the responses. Valid options are: black, white, gray, red, green, yellow, blue, magenta and cyan. There are also brighter versions of each color, for example: "bright blue". You can also make colors bold, for example: "bold red" or "bold bright cyan".
+* `--command-color`: sets the color of the commands in the responses. Valid options are: black, white, gray, red, green, yellow, blue, magenta and cyan. Brighter versions of each color are available, for example: "bright blue". You can also bold colors, for example: "bold red" or "bold bright cyan".
 
 * `--comment-color`: sets the color of the comments in the responses.
 
-* `--run`, `--no-run`: sets whether to show the menu prompt to execute each returned command.
+* `--run`, `--no-run`: controls whether to display the menu prompt to execute each returned command.
 
-* `--meta`, `--no-meta`: sets whether to send OS metadata to improve the responses. Currently this includes OS type and version (all OSes), shell type (macOS and Linux), and architecture (macOS). Users may choose to disable this feature either for privacy reasons, or in cases where it produces unwanted results (for example if the tool is running on a Windows machine, but the user expects answers about Linux).
+* `--meta`, `--no-meta`: determines whether to send OS metadata to refine the responses. This includes OS type and version (all OSes), shell type (macOS and Linux), and architecture (macOS). Users can choose to disable this feature for privacy reasons, or in cases where it yields undesired results (for example if the tool is operating on a Windows machine, but the user expects answers about Linux).
 
-Please check our [Roadmap](#roadmap) section for new and planned features as we develop the configuration options. We are committed to making BashSenpai user-friendly, flexible and easily-configurable and we value your initial feedback. If you have any suggestions or feature requests, don't hesitate to use the appropriate tools provided by GitHub to share your thoughts with us.
+Check our [Roadmap](#roadmap) section for new and upcoming features as we develop the configuration options. We are committed to making BashSenpai user-friendly, flexible, and easily-configurable, and we value your initial feedback. If you have any suggestions or feature requests, don't hesitate to use the appropriate tools provided by GitHub to share your ideas with us.
 
-## Contributing
+## 👥 Contributing
 
-We welcome contributions to enhance and improve the BashSenpai tool. If you have any ideas, bug reports, or feature requests, please open an issue on the GitHub repository. Feel free to fork the repository, make changes, and submit pull requests.
+We warmly welcome contributions to enrich and advance the BashSenpai tool. If you have any interesting ideas, bug reports, or feature requests, please create an issue on the GitHub repository. Feel free to fork the repository, make changes, and submit pull requests.
 
 To contribute to BashSenpai, please follow these steps:
 
 1. Fork the repository.
 2. Create a new branch for your feature or bug fix.
-3. Make your changes and ensure that the code doesn't break any core functionality of the tool.
+3. Make your changes, ensuring they do not disrupt the core functionality of the tool.
 4. Commit your changes and push them to your forked repository.
 5. Submit a pull request, providing a clear explanation of the changes you've made.
 
-We appreciate your interest in BashSenpai and will do our best to review any pull requests in a timely manner and keep an open discussion of what our feature goals are to make the contribution process easier and smooth for both parties.
+We appreciate your interest in BashSenpai and will do our best to review any pull requests promptly and maintain an open discussion of our feature goals to facilitate a smooth and easy contribution process for everyone involved.
 
-## License
+## 📜 License
 
-This project is licensed under the Apache 2.0 License. See the [LICENSE](LICENSE) file for more information.
+This project is licensed under the Apache 2.0 License. For more information, see the [LICENSE](LICENSE) file.
 
-## Roadmap
+## 🗺️ Roadmap
 
 ### Version 0.80 (planned)
 
 - [x] Better error handling: print better output on receiving an error from the API
-- [x] Extra context: provide optional information about your own environment to improve the results
-- [ ] Multi-language support: provided by ChatGPT
+- [x] Additional context: provide optional information about your own environment to improve the results
+- [ ] Multi-language support: delivered by ChatGPT
 
 ### Version 0.75 (finished)
 
@@ -170,11 +171,11 @@ This project is licensed under the Apache 2.0 License. See the [LICENSE](LICENSE
 
 TBD.
 
-## Maintainers
+## 👨‍💻 Maintainers
 
 This project is maintained by:
 
 - [Bogdan Tatarov](https://github.com/btatarov)
 - [Nikolay Dyankov](https://github.com/nikolaydyankov)
 
-We welcome contributions from the community. If you have any questions, suggestions, or bug reports, please feel free to reach out to any of the maintainers.
+We welcome contributions from the community. If you have any queries, suggestions, or bug reports, please feel free to connect with any of the maintainers.

@@ -1,12 +1,15 @@
 import os
 from pathlib import Path
 import sys
+import textwrap
+import time
 
 from .api import API
 from .config import Config
 from .history import History
 from .menu import Menu
 from .lib.color import parse_color
+from .lib.user_input import clear_line
 
 
 # default config storage based on OS type
@@ -71,8 +74,21 @@ class BashSenpai:
 
         """
 
+        # show the loading prompt
+        print(self.comment_color % '—' * os.get_terminal_size().columns)
+        print(
+            '⛽️ ' + self.comment_color % 'The request is being processed...',
+            end='',
+        )
+        sys.stdout.flush()
+
         # send an API call with the question and get a plain-text response
         response = self.api.question(question)
+
+        # hide the loading prompt
+        print('')
+        clear_line()
+        clear_line()
 
         if response.get('error', False):
             print('Error! %s.' % response.get('message'))
@@ -105,22 +121,49 @@ class BashSenpai:
             response_text = persona_text
 
         # format the response and collect a list of commands
-        commands = list()
         formatted_response = '\n'
+        commands = list()
+        terminal_size = os.get_terminal_size().columns
+
         for line in response_text.splitlines():
             if line.startswith('#'):
-                formatted_response += self.comment_color % line
+                formatted_response += '\n'.join([
+                    self.comment_color % line
+                    for line in textwrap.wrap(line, terminal_size)
+                ])
+
             else:
-                chunks = line.split(' # ', maxsplit=1)  # handle in-line comments
+                # get the full command
+                chunks = line.split(' # ', maxsplit=1)
                 if len(chunks[0].strip()) > 0:
                     commands.append(chunks[0].strip())
-                formatted_response += self.command_color % chunks[0]
-                if len(chunks) > 1:
-                    formatted_response += self.comment_color % f' # {chunks[1]}'
+
+                # text wrap
+                color = self.command_color
+                for i, wrapped in enumerate(textwrap.wrap(line, terminal_size)):
+                    # split lines
+                    if i > 0:
+                        formatted_response += '\n'
+
+                    # handle in-line comments
+                    chunks = wrapped.split(' # ', maxsplit=1)
+                    formatted_response += color % chunks[0]
+                    if len(chunks) > 1:
+                        # once we hit a comment, we change the color
+                        color = self.comment_color
+                        formatted_response += color % f' # {chunks[1]}'
+
             formatted_response += '\n'
 
-        # print the formatted response
-        print(formatted_response)
+
+        # print the formatted response with a typewriter effect
+        for char in formatted_response:
+            print(char, end='')
+            sys.stdout.flush()
+            if char.isprintable():
+                time.sleep(0.0085)
+        print('')
+        time.sleep(0.66)
 
         # if command execution is enabled, generate the menu and run it
         if self.config.get_value('execute') and len(commands) > 0:

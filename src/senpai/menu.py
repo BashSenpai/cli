@@ -1,7 +1,7 @@
 import os
 import subprocess
 
-from .lib.user_input import readkey, readinput, BASE_KEYS, SPECIFIC_KEYS
+from .lib.user_input import clear_line, readkey, readinput, BASE_KEYS, OS_KEYS
 
 
 class Menu:
@@ -44,7 +44,7 @@ class Menu:
         run any command from the remaining commands in the list. Once a command
         is run, it's removed from the list. The execution ends once no commands
         are left in the list or the user aborts the execution either with the
-        ESC key, or by using the regular interrupts.
+        Q key, or by using the regular interrupts.
 
         """
 
@@ -57,7 +57,7 @@ class Menu:
             self.terminal_size = os.get_terminal_size().columns
 
             for _ in range(len(self.commands) + 2 + self.extra_lines):
-                self._clear_line()
+                clear_line()
 
             for index, command in enumerate(self.commands):
                 # truncate longer commands
@@ -65,16 +65,16 @@ class Menu:
                     command = f'{command[:self.terminal_size - 8]}...'
 
                 if index == self.index:
-                    print(self.command_color % f'[>] {command}')
+                    print(self.command_color % f'👉 {command}')
                 else:
-                    print(self.comment_color % f'[ ] {command}')
+                    print(self.comment_color % f'   {command}')
 
             self._print_separator()
 
             prompt_prefix = 'Command to run: '
             print(
                 self.command_color % prompt_prefix + \
-                self.comment_color % self.commands[self.index]
+                self.comment_color % self.commands[self.index],
             )
 
             # extra lines to clear if the prompt goes on more lines
@@ -83,15 +83,15 @@ class Menu:
 
             # handle user input
             key = readkey()
-            if key in [SPECIFIC_KEYS.UP, 'k', 'K']:
+            if key in [OS_KEYS.UP, 'k', 'K']:
                 if self.index > 0:
                     self.index -= 1
-            elif key in [SPECIFIC_KEYS.DOWN, 'j', 'J']:
+            elif key in [OS_KEYS.DOWN, 'j', 'J']:
                 if self.index < len(self.commands) - 1:
                     self.index += 1
             elif key in ['e', 'E']:
                 self.edit()
-            elif key in [BASE_KEYS.SPACE, SPECIFIC_KEYS.ENTER]:
+            elif key in [BASE_KEYS.SPACE, OS_KEYS.ENTER]:
                 self.execute()
                 if self.commands:
                     self._print_header()
@@ -106,7 +106,7 @@ class Menu:
         """Edit the current selected command from the command list."""
 
         for _ in range(1 + self.extra_lines):
-            self._clear_line()
+            clear_line()
 
         prompt_prefix = 'Edit command: '
         self.commands[self.index] = readinput(
@@ -122,7 +122,7 @@ class Menu:
         """Execute the current selected command from the command list."""
 
         for _ in range(1 + self.extra_lines):
-            self._clear_line()
+            clear_line()
 
         # get current command
         command = self.commands.pop(self.index)
@@ -147,22 +147,21 @@ class Menu:
         if self.index > 0:
             self.index -= 1
 
-    def _clear_line(self) -> None:
-        """Clears any text from the last line."""
-
-        print(f'\x1B[1A\x1B[2K\r', end='')
-
     def _print_header(self) -> None:
         """Prints the header of the menu."""
 
         self._print_separator()
         print(
-            self.command_color % '[?] ' + \
-            self.comment_color %
-                'Press [Enter] to execute, [E] to edit, or [Q] to exit.'
+            self.command_color % '⚙️  ' + \
+            self.comment_color % 'Press ' + \
+            self.command_color % '[Enter]' + \
+            self.comment_color % ' to execute, ' + \
+            self.command_color % '[E]' + \
+            self.comment_color % ' to edit, or ' + \
+            self.command_color % '[Q]' + \
+            self.comment_color % ' to exit.'
         )
         self._print_separator()
-
 
     def _print_newlines(self) -> None:
         """Prints the expected new lines for a new menu prompt."""
@@ -172,4 +171,4 @@ class Menu:
     def _print_separator(self) -> None:
         """Prints a line separator."""
 
-        print(self.comment_color % '-' * self.terminal_size)
+        print(self.comment_color % '—' * self.terminal_size)

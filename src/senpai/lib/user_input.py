@@ -21,17 +21,23 @@ class BASE_KEYS:
 
 if sys.platform in ('win32', 'cygwin'):
 
-    class SPECIFIC_KEYS:
+    class OS_KEYS:
         UP    = '\x00\x48'
         DOWN  = '\x00\x50'
         ENTER = '\x0D'
 
 else:  # linux, macos
 
-    class SPECIFIC_KEYS:
+    class OS_KEYS:
         UP    = '\x1B\x5B\x41'
         DOWN  = '\x1B\x5B\x42'
         ENTER = '\x0A'
+
+
+def clear_line() -> None:
+    """Clears any text from the last line."""
+
+    print(f'\x1B[1A\x1B[2K\r', end='')
 
 
 def readchar() -> str:

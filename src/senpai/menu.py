@@ -71,7 +71,7 @@ class Menu:
 
             self._print_separator()
 
-            prompt_prefix = 'Command to run: '
+            prompt_prefix = '🧰 Run: '
             print(
                 self.command_color % prompt_prefix + \
                 self.comment_color % self.commands[self.index],
@@ -108,7 +108,7 @@ class Menu:
         for _ in range(1 + self.extra_lines):
             clear_line()
 
-        prompt_prefix = 'Edit command: '
+        prompt_prefix = '📝 Edit: '
         self.commands[self.index] = readinput(
             self.command_color % prompt_prefix,
             self.commands[self.index],
@@ -129,7 +129,7 @@ class Menu:
 
         # print the execute prompt line
         print(
-            self.command_color % f'Execute command: ' + \
+            self.command_color % f'🚀 Execute: ' + \
             self.comment_color % command
         )
         print('')

@@ -75,9 +75,12 @@ class BashSenpai:
         """
 
         # show the loading prompt
-        print(self.comment_color % '—' * os.get_terminal_size().columns)
+        terminal_height = os.get_terminal_size().lines
+        print('\n' * (terminal_height - 1), end='')
+        for _ in range(terminal_height - 1):
+            clear_line()
         print(
-            '⛽️ ' + self.comment_color % 'The request is being processed...',
+            '⛽️ ' + self.comment_color % 'Your request is being processed...',
             end='',
         )
         sys.stdout.flush()
@@ -87,7 +90,6 @@ class BashSenpai:
 
         # hide the loading prompt
         print('')
-        clear_line()
         clear_line()
 
         if response.get('error', False):
@@ -121,7 +123,7 @@ class BashSenpai:
             response_text = persona_text
 
         # format the response and collect a list of commands
-        formatted_response = '\n'
+        formatted_response = ''
         commands = list()
         terminal_size = os.get_terminal_size().columns
 

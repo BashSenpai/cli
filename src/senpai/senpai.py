@@ -80,7 +80,7 @@ class BashSenpai:
         for _ in range(terminal_height - 1):
             clear_line()
         print(
-            '⛽️ ' + self.comment_color % 'Your request is being processed...',
+            '⌛️ ' + self.comment_color % 'Your request is being processed...',
             end='',
         )
         sys.stdout.flush()

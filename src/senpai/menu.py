@@ -71,7 +71,7 @@ class Menu:
 
             self._print_separator()
 
-            prompt_prefix = '🧰 Run: '
+            prompt_prefix = '🚀 Run: '
             print(
                 self.command_color % prompt_prefix + \
                 self.comment_color % self.commands[self.index],
@@ -121,20 +121,11 @@ class Menu:
     def execute(self) -> None:
         """Execute the current selected command from the command list."""
 
-        for _ in range(1 + self.extra_lines):
-            clear_line()
-
         # get current command
         command = self.commands.pop(self.index)
 
-        # print the execute prompt line
-        print(
-            self.command_color % f'🚀 Execute: ' + \
-            self.comment_color % command
-        )
-        print('')
-
         # execute the command and print the result
+        print('')
         command_result = subprocess.run(
             command,
             shell=True, capture_output=True, text=True,
@@ -152,7 +143,7 @@ class Menu:
 
         self._print_separator()
         print(
-            self.command_color % '⚙️  ' + \
+            self.command_color % '💬 ' + \
             self.comment_color % 'Press ' + \
             self.command_color % '[Enter]' + \
             self.comment_color % ' to execute, ' + \

@@ -99,14 +99,14 @@ class BashSenpai:
             error_type = response.get('type', None)
             if error_type == 'auth':
                 print(f'Run first: {prog} login')
-                sys.exit(6)
+                sys.exit(2)
             elif error_type in ['timeout', 'server']:
                 print('Try running the same command again a little later.')
-                sys.exit(7)
+                sys.exit(3)
             elif error_type == 'history':
                 print(f'Try running: {prog} -n <question>')
-                sys.exit(8)
-            sys.exit(9)  # Unknown error
+                sys.exit(3)
+            sys.exit(3)  # Unknown error
 
         # write the new question/persona pair in the user history
         self.history.add({

@@ -57,7 +57,7 @@ class API:
             elif response['error']['code'] == 3:
                 print('Error! Your user doesn\'t have a subscription.')
                 print('Visit https://bashsenpai.com/dashboard and subscribe.')
-            sys.exit(5)
+            sys.exit(2)
 
         # store the auth token in the config file
         self._config.set_value('token', token)
@@ -78,7 +78,7 @@ class API:
         if not token:
             prog = self._config.get_value('prog')
             print(f'You are not authenticated. First run:\n{prog} login')
-            sys.exit(6)
+            sys.exit(2)
 
         # send the question to our API
         response = POST(f'{self.HOST}/prompt/', json={

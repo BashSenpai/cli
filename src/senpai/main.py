@@ -120,7 +120,7 @@ def main():
     if len(sys.argv) < 2:
         print('Error! No arguments provided. For list of available options, run:')
         print(f'{parser.prog} --help')
-        sys.exit(-1)
+        sys.exit(1)
 
     # parse the arguments
     args = parser.parse_args()
@@ -181,7 +181,7 @@ def main():
     if prompt == 'login':
         if len(args.prompt) > 1:
             print('Error! The login command takes no extra arguments.')
-            sys.exit(3)
+            sys.exit(1)
 
         # read the auth token from the stdin and send a login request
         token = input('Auth token: ')
@@ -190,7 +190,7 @@ def main():
     elif prompt == 'become':
         if len(args.prompt) == 1:
             print('Error! Please provide the persona you wish BashSenpai to use.')
-            sys.exit(4)
+            sys.exit(1)
 
         persona = ' '.join(args.prompt[1:])
         senpai.config.set_value('persona', persona)

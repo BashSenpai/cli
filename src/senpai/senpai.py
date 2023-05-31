@@ -1,8 +1,10 @@
 import os
 from pathlib import Path
+import platform
 import sys
 import textwrap
 import time
+from typing import Union
 
 from .api import API
 from .config import Config
@@ -42,6 +44,7 @@ class BashSenpai:
     """
 
     CONFIG_DIR = CONFIG_BASE / 'senpai'
+    DASHBOARD_URL = 'https://bashsenpai.com/dashboard'
 
     def __init__(self) -> None:
         """Initialize the BashSenpai object.
@@ -57,7 +60,8 @@ class BashSenpai:
 
         self.config = Config(path=self.CONFIG_DIR)
         self.history = History(path=self.CONFIG_DIR)
-        self.api = API(config=self.config, history=self.history)
+
+        self._api = API(config=self.config, history=self.history)
 
         # parse colors
         self.command_color = parse_color(self.config.get_value('command_color'))
@@ -86,7 +90,7 @@ class BashSenpai:
         sys.stdout.flush()
 
         # send an API call with the question and get a plain-text response
-        response = self.api.question(question)
+        response = self._api.question(question, metadata=self._get_metadata())
 
         # hide the loading prompt
         print('')
@@ -98,7 +102,7 @@ class BashSenpai:
             prog = self.config.get_value('prog')
             error_type = response.get('type', None)
             if error_type == 'auth':
-                print(f'Run first: {prog} login')
+                print(f'Run: {prog} login')
                 sys.exit(2)
             elif error_type in ['timeout', 'server']:
                 print('Try running the same command again a little later.')
@@ -174,3 +178,87 @@ class BashSenpai:
                 colors=(self.command_color, self.comment_color),
             )
             menu.display()
+
+        # check if the tool is on the latest version, otherwise show a message
+        latest_version = response.get('latest_version', '0')
+        if latest_version > self.config.get_value('version'):
+            print('')
+            print('There is a new version available, please consider updating.')
+
+
+    def login(self, token: str) -> None:
+        """Validate the auth token and store it in the config file.
+
+        Args:
+            token (str): The auth token provided by the user.
+
+        """
+
+        # send an API call with the auth token and get a JSON response
+        response = self._api.login(token)
+
+        if not response['success']:
+            if response['error']['code'] == 1:
+                print('Error! No token provided.')
+            elif response['error']['code'] == 2:
+                print('Error! Invalid auth token provided.')
+                print(f'Visit {self.DASHBOARD_URL} to retreive a valid token.')
+            elif response['error']['code'] == 3:
+                print('Error! Your user doesn\'t have a valid subscription.')
+                print(f'Visit {self.DASHBOARD_URL} to subscribe.')
+            sys.exit(2)
+
+        # store the auth token in the config file
+        self.config.set_value('token', token)
+        self.config.write()
+
+        print('Authentication successful.')
+
+    def _get_metadata(self) -> Union[dict[str, str], None]:
+        """
+        Gets user system information to include with the prompt. The user may
+        disable this functionality for privacy or other reasons.
+
+        Returns:
+            dict or None: Dictionary containing the user metadata.
+        """
+
+        if not self.config.get_value('metadata'):
+            return None
+
+        metadata = dict()
+
+        if sys.platform in ('win32', 'cygwin'):  # windows
+            metadata['os'] = 'Windows'
+            metadata['version'] = platform.win32_ver()[0]
+
+        elif sys.platform in ('darwin',):  # macos
+            mac_ver = platform.mac_ver()
+            metadata['os'] = 'macOS'
+            metadata['version'] = mac_ver[0]
+            metadata['arch'] = mac_ver[-1]
+            metadata['shell'] = os.environ.get('SHELL', None)
+
+        else:  # linux, freebsd, etc.
+            metadata['os'] = 'Linux'
+            metadata['version'] = None
+
+            # raw-parse os-release as python 3.9 lacks freedesktop_os_release
+            os_release_path = Path('/etc/os-release')
+            if not os_release_path.exists():
+                os_release_path = Path('/usr/lib/os-release')
+                if not os_release_path.exists():
+                    os_release_path = None
+
+            if os_release_path:
+                with open(os_release_path) as f:
+                    os_release = f.read()
+
+                for line in os_release.splitlines():
+                    line = line.strip()
+                    if line.upper().startswith('PRETTY_NAME'):
+                        metadata['version'] = line.split('=')[1].strip('"\'')
+
+            metadata['shell'] = os.environ.get('SHELL', None)
+
+        return metadata

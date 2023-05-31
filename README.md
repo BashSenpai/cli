@@ -154,11 +154,16 @@ This project is licensed under the Apache 2.0 License. For more information, see
 
 ## 🗺️ Roadmap
 
-### Version 0.80 (planned)
+### Version 0.90 (planned)
+- [ ] Provide instructions of how to update when a new version is available (based on OS)
+- [ ] Generate docker compose configuration files
+
+### Version 0.80 (finished)
 
 - [x] Better error handling: print better output on receiving an error from the API
 - [x] Additional context: provide optional information about your own environment to improve the results
-- [ ] Multi-language support: delivered by ChatGPT
+- [x] Improve the formatting of the output of the CLI
+- [x] Check if a new version is available
 
 ### Version 0.75 (finished)
 
@@ -169,7 +174,7 @@ This project is licensed under the Apache 2.0 License. For more information, see
 
 ### Other planned features
 
-TBD.
+- [ ] Multi-language support: delivered by ChatGPT
 
 ## 👨‍💻 Maintainers
 

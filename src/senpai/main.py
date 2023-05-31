@@ -5,7 +5,7 @@ from .senpai import BashSenpai
 
 
 class SimpleNargsFormatter(argparse.RawDescriptionHelpFormatter):
-    """Formatter that skips metavar text formatting."""
+    """Custom argparse Formatter that skips metavar text formatting."""
 
     def _format_args(self, action, default_metavar):
         get_metavar = self._metavar_formatter(action, default_metavar)
@@ -125,8 +125,9 @@ def main():
     # parse the arguments
     args = parser.parse_args()
 
-    # store the app name in the config
+    # store the app name and version in the config
     senpai.config.set_value('prog', parser.prog)
+    senpai.config.set_value('version', get_version())
     senpai.config.write()
 
     # set colors
@@ -185,7 +186,7 @@ def main():
 
         # read the auth token from the stdin and send a login request
         token = input('Auth token: ')
-        senpai.api.login(token)
+        senpai.login(token)
 
     elif prompt == 'become':
         if len(args.prompt) == 1:

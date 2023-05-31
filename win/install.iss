@@ -2,7 +2,7 @@
 ; SEE THE DOCUMENTATION FOR DETAILS ON CREATING INNO SETUP SCRIPT FILES!
 
 #define MyAppName "BashSenpai CLI"
-#define MyAppVersion "0.79b"
+#define MyAppVersion "0.80b"
 #define MyAppPublisher "Bash Senpai"
 #define MyAppURL "https://bashsenpai.com/"
 #define MyAppExeName "senpai.exe"
@@ -27,7 +27,7 @@ LicenseFile=..\..\LICENSE
 ; PrivilegesRequiredOverridesAllowed=dialog
 ChangesEnvironment=yes
 OutputDir=.
-OutputBaseFilename=BashSenpaiSetup
+OutputBaseFilename=BashSenpaiSetup-v{#MyAppVersion}
 SetupIconFile=..\..\media\app.ico
 Compression=lzma
 SolidCompression=yes

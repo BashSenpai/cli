@@ -80,7 +80,7 @@ brew install senpai-cli
 
 ### Windows
 
-Download: **[Installer](https://bashsenpai.com/latest/BashSenpaiSetup.exe)**.
+Download: **[Installer](https://bashsenpai.com/download/latest)**.
 
 ## ⌨️ Usage
 

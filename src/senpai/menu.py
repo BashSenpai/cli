@@ -79,7 +79,7 @@ class Menu:
 
             # extra lines to clear if the prompt goes on more lines
             prompt_len = len(self.commands[self.index]) + len(prompt_prefix)
-            self.extra_lines = (prompt_len - 1) // self.terminal_size
+            self.extra_lines = prompt_len // self.terminal_size
 
             # handle user input
             key = readkey()
@@ -116,7 +116,7 @@ class Menu:
 
         # extra lines to clear if the prompt goes on more lines
         prompt_len = len(self.commands[self.index]) + len(prompt_prefix)
-        self.extra_lines = (prompt_len - 1) // self.terminal_size
+        self.extra_lines = prompt_len // self.terminal_size
 
     def execute(self) -> None:
         """Execute the current selected command from the command list."""

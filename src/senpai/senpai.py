@@ -1,3 +1,4 @@
+import json
 import os
 from pathlib import Path
 import platform
@@ -78,6 +79,9 @@ class BashSenpai:
 
         """
 
+        # separate the output from the shell command with a single line
+        print('')
+
         # show the loading prompt
         terminal_height = os.get_terminal_size().lines
         print('\n' * (terminal_height - 1), end='')
@@ -112,26 +116,41 @@ class BashSenpai:
                 sys.exit(3)
             sys.exit(3)  # Unknown error
 
+
         # write the new question/persona pair in the user history
         self.history.add({
             'question': question,
-            'answer': response.get('response', ''),
-            'persona': response.get('persona', None),
+            'answer': response.get('response', []),
+            'persona': response.get('persona', []),
         })
         self.history.write()
 
+
         # determine whether to show the regular response or the persona one
-        response_text = response.get('response', '')
-        persona_text = response.get('persona', None)
-        if persona_text:
-            response_text = persona_text
+        response_data = response.get('response', [])
+        persona_data = response.get('persona', [])
+        if persona_data:
+            response_data = persona_data
+
+        # converts json response to plain-text
+        response_text = ''
+        for response_line in response_data:
+            dtype = response_line.get('type', None)
+            data = response_line.get('data', '').strip()
+            if dtype == 'command':
+                response_text += f'{data}\n'
+            elif dtype == 'comment':
+                data = data.lstrip("#").lstrip()
+                response_text += f'# {data}\n'
+            elif dtype == 'empty_line':
+                response_text += '\n'
 
         # format the response and collect a list of commands
         formatted_response = ''
         commands = list()
         terminal_size = os.get_terminal_size().columns
 
-        for line in response_text.splitlines():
+        for line in response_text.strip().splitlines():
             if line.startswith('#'):
                 formatted_response += '\n'.join([
                     self.comment_color % line

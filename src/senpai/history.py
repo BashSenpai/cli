@@ -36,14 +36,17 @@ class History:
         self._load()
 
     def _load(self) -> None:
-        """Load user history with previous interactions from the history file."""
+        """
+        Load user history with previous interactions from the history file.
+
+        """
 
         self._history = list()
         if self.path.exists():
             with open(self.path, 'r') as f:
                 self._history = json.load(f)
 
-    def add(self, prompt: dict[str, str]) -> None:
+    def add(self, prompt: dict[str, Union[str, list[Any]]]) -> None:
         """Add a new prompt to the user history.
 
         Args:

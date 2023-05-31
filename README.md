@@ -15,7 +15,7 @@ BashSenpai is a command-line tool that utilizes the power of ChatGPT, bringing i
 
 - Powered by ChatGPT.
 - Refined prompts employing a multi-step self-reflection process for the most optimal results.
-- Receive answers executable directly in the terminal, complemented with instructive comment explanations.
+- Receive answers executable directly in the terminal, complemented with instructive comments.
 - Ask follow-up questions without providing any context; our API will include your log history.
 - Menu prompt after each response, enabling you to run any provided commands, or modify if needed.
 - Share optional information about the OS you are using to enhance the responses for general queries.
@@ -157,6 +157,7 @@ This project is licensed under the Apache 2.0 License. For more information, see
 ### Version 0.90 (planned)
 - [ ] Provide instructions of how to update when a new version is available (based on OS)
 - [ ] Generate docker compose configuration files
+- [ ] Windows code signing
 
 ### Version 0.80 (finished)
 

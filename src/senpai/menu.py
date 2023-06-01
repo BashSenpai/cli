@@ -6,18 +6,26 @@ from .lib.user_input import clear_line, readkey, readinput, BASE_KEYS, OS_KEYS
 
 class Menu:
     """
-    Menu is responsible for prompting the user to execute commands provided as a
-    list of strings.
+    A command execution menu.
 
-    Once the display method is called, it runs in an endless loop until the user
-    cancels the execution or there are no commands left to run. The user can
-    choose to to edit or execute the currently selected command. Command
-    selection is done using the arrow keys.
+    This class provides an interactive menu for executing commands provided as a
+    list of strings. The menu runs in an endless loop until the user
+    cancels the execution or there are no commands left to run.
+
+    Attributes:
+        commands (list[str]): A list of commands provided to the menu to be run.
+        index (int): The index of the currently selected command in the list.
+        command_color (str): A string representing the ANSI escape sequence
+            for coloring command texts.
+        comment_color (str): A string representing the ANSI escape sequence
+            for coloring comment texts.
+        terminal_size (int): The width of the terminal in characters.
+        extra_lines (int): The extra lines that need to be cleared command
+            wrapping.
 
     Usage:
-    >>> menu = Menu(commands=commands, colors=(command_color, comment_color))
-    >>> menu.display()
-
+        >>> menu = Menu(commands=commands, colors=(command_color, comment_color))
+        >>> menu.display()
     """
 
     def __init__(self, commands: list[str], colors: tuple[str, str]) -> None:
@@ -25,11 +33,11 @@ class Menu:
         Initialize the menu with a list of commands to run.
 
         Args:
-            options (list[str]): The options to select from.
+            commands (list[str]): The commands to select from.
             colors (tuple[str, str]): A tuple containing the command and comment
                 color patterns.
-
         """
+
         self.commands = commands
         self.index = 0
 
@@ -40,12 +48,13 @@ class Menu:
 
     def display(self) -> None:
         """
-        Handles drawing the manu and handling all user input. Users can edit or
-        run any command from the remaining commands in the list. Once a command
-        is run, it's removed from the list. The execution ends once no commands
-        are left in the list or the user aborts the execution either with the
-        Q key, or by using the regular interrupts.
+        Displays the menu and handles user input.
 
+        In the menu, users can edit or run any command from the remaining
+        commands in the list. Once a command is run, it's removed from the list.
+        The execution ends once no commands are left in the list or the user
+        aborts the execution either with the 'Q' key, or by using the regular
+        interrupts.
         """
 
         self._print_header()
@@ -103,8 +112,7 @@ class Menu:
                 break
 
     def edit(self) -> None:
-        """Edit the current selected command from the command list."""
-
+        """Allows the user to edit the currently selected command."""
         for _ in range(1 + self.extra_lines):
             clear_line()
 
@@ -119,7 +127,10 @@ class Menu:
         self.extra_lines = prompt_len // self.terminal_size
 
     def execute(self) -> None:
-        """Execute the current selected command from the command list."""
+        """
+        Executes the currently selected command and removes it from the command
+        list.
+        """
 
         # get current command
         command = self.commands.pop(self.index)
@@ -140,7 +151,6 @@ class Menu:
 
     def _print_header(self) -> None:
         """Prints the header of the menu."""
-
         self._print_separator()
         print(
             self.command_color % '💬 ' + \
@@ -155,11 +165,9 @@ class Menu:
         self._print_separator()
 
     def _print_newlines(self) -> None:
-        """Prints the expected new lines for a new menu prompt."""
-
+        """Prints the new lines for a new menu prompt."""
         print('\n' * (len(self.commands) + 1))
 
     def _print_separator(self) -> None:
         """Prints a line separator."""
-
         print(self.comment_color % '—' * self.terminal_size)

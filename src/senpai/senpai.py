@@ -1,4 +1,3 @@
-import json
 import os
 from pathlib import Path
 import platform
@@ -26,35 +25,42 @@ else:  # linux, freebsd, etc.
 
 class BashSenpai:
     """
-    BashSenpai is a tool that helps new Linux users work in the terminal by
-    providing the ability to ask questions about commands or features directly
-    from the terminal.
+    BashSenpai is a tool that provides assistance to new Linux users working in
+    the terminal. It allows users to ask questions about commands or features
+    directly from the terminal.
 
-    It interacts with the BashSenpai API to send questions and receive formatted
+    BashSenpai interacts with an API to send questions and receive formatted
     responses. The API provides concise explanations and commands for Linux
-    shell environments using ChatGPT as a backend.
+    shell environments using ChatGPT as a backend. It maintains a configuration
+    file, user history, generates a menu for executing returned commands, and
+    formats response output with configurable colors converted to ANSI-escaped
+    sequences.
 
-    The tool maintains a configuration file, user history, can generate a menu
-    for executing the returned commands, and uses configurable colors converted
-    to ANSI-escaped sequences for formatting the response output.
+    Attributes:
+        CONFIG_DIR (Path): The directory where configuration files are stored.
+        DASHBOARD_URL (str): The URL for the dashboard of the application.
+        config (Config): The configuration object managing the settings..
+        history (History): The history object managing the user's interactions.
+        _api (API): The private API object managing the communication with the
+            backend.
+        command_color (str): The ANSI color code for commands.
+        comment_color (str): The ANSI color code for comments.
 
     Usage:
-    >>> senpai = BashSenpai()
-    >>> senpai.ask_question('How do I list files in a directory')
-
+        >>> senpai = BashSenpai()
+        >>> senpai.ask_question('How do I list files in a directory')
     """
 
     CONFIG_DIR = CONFIG_BASE / 'senpai'
     DASHBOARD_URL = 'https://bashsenpai.com/dashboard'
 
     def __init__(self) -> None:
-        """Initialize the BashSenpai object.
+        """
+        Initialize the BashSenpai object.
 
         Creates the configuration directory if it doesn't exist and initializes
         the `config`, `history`, and `api` objects.
-
         """
-
         # create config dir if it doesn't exist
         path = Path(self.CONFIG_DIR)
         path.mkdir(parents=True, exist_ok=True)
@@ -70,15 +76,14 @@ class BashSenpai:
 
     def ask_question(self, question: str) -> None:
         """
-        Send a question to the BashSenpai API and print a formatted response. If
-        the user has command execution enabled, generates a menu for executing
-        each command.
+        Send a question to the BashSenpai API and print a formatted response.
+
+        If the user has command execution enabled, generates a menu for
+        executing each command.
 
         Args:
             question (str): The question to send to the API.
-
         """
-
         # separate the output from the shell command with a single line
         print('')
 
@@ -116,7 +121,6 @@ class BashSenpai:
                 sys.exit(3)
             sys.exit(3)  # Unknown error
 
-
         # write the new question/persona pair in the user history
         self.history.add({
             'question': question,
@@ -124,7 +128,6 @@ class BashSenpai:
             'persona': response.get('persona', []),
         })
         self.history.write()
-
 
         # determine whether to show the regular response or the persona one
         response_data = response.get('response', [])
@@ -206,13 +209,12 @@ class BashSenpai:
 
 
     def login(self, token: str) -> None:
-        """Validate the auth token and store it in the config file.
+        """
+        Validate the auth token and store it in the config file.
 
         Args:
             token (str): The auth token provided by the user.
-
         """
-
         # send an API call with the auth token and get a JSON response
         response = self._api.login(token)
 
@@ -235,13 +237,13 @@ class BashSenpai:
 
     def _get_metadata(self) -> Union[dict[str, str], None]:
         """
-        Gets user system information to include with the prompt. The user may
-        disable this functionality for privacy or other reasons.
+        Gets user system information to include with the prompt.
+
+        The user may disable this functionality for privacy or other reasons.
 
         Returns:
             dict or None: Dictionary containing the user metadata.
         """
-
         if not self.config.get_value('metadata'):
             return None
 

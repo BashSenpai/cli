@@ -1,4 +1,4 @@
-# Initial code is borrowed from python-readchar:
+# Some of the code is borrowed from python-readchar:
 # https://github.com/magmax/python-readchar
 import sys
 
@@ -14,39 +14,41 @@ else:
 
 
 class BASE_KEYS:
+    """Base key codes."""
     CTRL_C = '\x03'
     CTRL_D = '\x04'
     SPACE  = '\x20'
 
 
 if sys.platform in ('win32', 'cygwin'):
-
     class OS_KEYS:
+        """Windows OS-specific key codes."""
         UP    = '\x00\x48'
         DOWN  = '\x00\x50'
         ENTER = '\x0D'
 
 else:  # linux, macos
-
     class OS_KEYS:
+        """Linux and MacOS OS-specific key codes."""
         UP    = '\x1B\x5B\x41'
         DOWN  = '\x1B\x5B\x42'
         ENTER = '\x0A'
 
 
 def clear_line() -> None:
-    """Clears any text from the last line."""
-
+    """
+    Clears any text from the last line in the console.
+    """
     print(f'\x1B[1A\x1B[2K\r', end='')
 
 
 def readchar() -> str:
     """
-    Reads a single character from the input stream. Blocks until a character is
-    available.
+    Reads a single character from the standard input.
 
+    Returns:
+        str: The character read from the standard input.
     """
-
     # handle for windows
     if sys.platform in ('win32', 'cygwin'):
         # manual byte decoding as some bytes in windows are not utf-8 encodable
@@ -67,17 +69,16 @@ def readchar() -> str:
 
 def readinput(prompt: str, default: str) -> str:
     """
-    Reads user input with an extra default value provided and returns the result.
+    Reads user input with an extra default value provided and returns the
+    result.
 
     Args:
         prompt (str): The default prompt to show when reading the input.
-        default: The default value to set for editing.
+        default (str): The default value to set for editing.
 
     Returns:
         str: The value read from the user input.
-
     """
-
     # handle windows
     if sys.platform in ('win32', 'cygwin'):
         _stdin = win32console.GetStdHandle(win32console.STD_INPUT_HANDLE)
@@ -109,8 +110,9 @@ def readkey() -> str:
     Reads the next keypress. If an escaped key is pressed, the full sequence is
     read and returned.
 
+    Returns:
+        str: The key sequence read from the standard input.
     """
-
     c1 = readchar()
 
     if c1 == BASE_KEYS.CTRL_C:

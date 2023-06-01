@@ -10,28 +10,34 @@ class Config:
     It loads the user's config file in TOML format, allows getting and setting
     specific configuration values, and writing the updated configuration file.
 
-    Usage:
-    >>> config = Config(path=Path('/path/to/config'))
-    >>> token = config.get_value('token')
-    >>> config.set_value('token', '<your_auth_token>')
-    >>> config.write()
+    Attributes:
+        path (Path): The path to the user configuration file.
+        _config (dict): The dictionary holding the current configuration values.
 
+    Usage:
+        >>> config = Config(path=Path('/path/to/config'))
+        >>> token = config.get_value('token')
+        >>> config.set_value('token', '<your_auth_token>')
+        >>> config.write()
     """
 
     def __init__(self, path: Path) -> None:
-        """Initialize the Config object.
+        """
+        Initialize the Config object with the provided configuration file path.
 
         Args:
             path (Path): The path to the directory where the config file is
-            located.
-
+                located.
         """
         self.path = path / 'config.toml'
         self._load()
 
     def _load(self) -> None:
-        """Load the user configuration file and set the configuration values."""
+        """
+        Load the configuration file and set the configuration values.
 
+        If the file doesn't exist, creates a new dictionary with default values.
+        """
         try:
             with open(self.path, 'r') as f:
                 config = toml.load(f)
@@ -50,7 +56,8 @@ class Config:
         }
 
     def get_value(self, setting: str) -> Union[str, None]:
-        """Get the value of a specific configuration setting.
+        """
+        Get the value of a specific configuration setting.
 
         Args:
             setting (str): The name of the configuration setting.
@@ -58,23 +65,26 @@ class Config:
         Returns:
             str or None: The value of the configuration setting, or None if
             not found.
-
         """
         return self._config.get(setting.upper(), None)
 
     def set_value(self, setting: str, value: Union[str, bool]) -> None:
-        """Set the value of a specific configuration setting.
+        """
+        Set the value of a specific configuration setting.
 
         Args:
             setting (str): The name of the configuration setting.
             value (str | bool): The new value for the configuration setting.
-
         """
         self._config[setting.upper()] = value
 
     def write(self) -> None:
-        """Write the current configuration values to the user config file."""
+        """
+        Write the current configuration values to the user config file.
 
+        The config file is stored in TOML format. If a configuration file does
+        not exist, a new one is created.
+        """
         with open(self.path, 'w') as f:
             config_data = {
                 'main': {

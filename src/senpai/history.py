@@ -5,75 +5,78 @@ from typing import Any, Dict, List, Union
 
 class History:
     """
-    History is responsible for managing the user's interaction history with the
-    BashSenpai tool.
+    This class is responsible for managing the user's interaction history with
+    the BashSenpai tool.
 
-    It loads the previous history from a JSON file and allows adding new prompts
-    to the history, clearing the history, retrieving the current history, and
-    writing the history to the file.
+    The class loads the previous history from a JSON file upon initialization.
+    It allows adding new prompts to the history, clearing the history,
+    retrieving the current history, and writing the history to the file.
+
+    Attributes:
+        path (Path): Path to the JSON file storing the history.
+        _history (List[Dict[str, Union[str, List[Any]]]]): Loaded history data.
 
     Usage:
-    >>> history = History(path=Path('/path/to/history'))
-    >>> history.add({
-    >>>     'question': 'how do I list files', 'answer': 'ls -l', 'persona': ''
-    >>> })
-    >>> history.write()
-    >>> prompts = history.get_history()
-    >>> print(prompts)
-
+        >>> history = History(path=Path('/path/to/history'))
+        >>> history.add({
+        >>>     'question': 'how to list files', 'answer': 'ls -l', 'persona': ''
+        >>> })
+        >>> history.write()
+        >>> prompts = history.get_history()
+        >>> print(prompts)
     """
 
     def __init__(self, path: Path) -> None:
-        """Initialize the History object.
+        """
+        Initializes the History object, sets the path to the history file, and
+        loads the history.
 
         Args:
             path (Path): The path to the directory where the history file is
-            located.
-
+                located.
         """
-
         self.path = path / 'history.json'
         self._load()
 
     def _load(self) -> None:
         """
-        Load user history with previous interactions from the history file.
-
+        Private method to load user history from the history file.
+        If the history file does not exist, initialize an empty history.
         """
-
         self._history = list()
         if self.path.exists():
             with open(self.path, 'r') as f:
                 self._history = json.load(f)
 
     def add(self, prompt: dict[str, Union[str, list[Any]]]) -> None:
-        """Add a new prompt to the user history.
+        """
+        Adds a new prompt to the user history.
 
         Args:
-            prompt (dict): The prompt containing the question and answer.
-
+            prompt (Dict[str, Union[str, List[Any]]]): The prompt to be added to
+                the history.
         """
-
         self._history.append(prompt)
 
     def clear(self) -> None:
         """Clear the previous user history."""
-
         self._history = list()
 
     def get_history(self) -> List[Union[Dict[str, str], Any]]:
-        """Get the current user history.
+        """
+        Returns the current user interaction history.
 
         Returns:
-            list: The list of prompts in the user's history.
-
+            List[Dict[str, Union[str, List[Any]]]]: The current user's
+                interaction history.
         """
-
         return self._history
 
     def write(self) -> None:
-        """Write the current user history to the history log file."""
-
+        """
+        Writes the current user history to the history log file.
+        Only the latest 5 prompts are kept.
+        """
         with open(self.path, 'w') as f:
             # limit to latest 5 prompts only
             json.dump(self._history[-5:], f)

@@ -5,23 +5,41 @@ from .senpai import BashSenpai
 
 
 class SimpleNargsFormatter(argparse.RawDescriptionHelpFormatter):
-    """Custom argparse Formatter that skips metavar text formatting."""
+    """
+    Custom argparse Formatter that skips metavar text formatting.
 
-    def _format_args(self, action, default_metavar):
+    This formatter is designed to avoid repetition of metavar text in the help
+    output when nargs is used. The _format_args method is overridden to achieve
+    this.
+    """
+
+    def _format_args(self, action: argparse.Action, default_metavar: str) -> str:
+        """
+        Returns a string representing the argument(s), replacing the default
+        metavar.
+
+        Args:
+            action (argparse.Action): The action object containing information
+                about the argument.
+            default_metavar (str): The default metavar for the argument.
+
+        Returns:
+            str: A string representing the formatted argument(s).
+        """
         get_metavar = self._metavar_formatter(action, default_metavar)
         return '%s' % get_metavar(1)
 
 
-# get __version__ from __init__.py
 def get_version() -> str:
     """
     Get the current version of the application from __init__.py.
 
+    The version is retrieved by importing the __version__ attribute from the
+    __init__.py file.
+
     Returns:
-        str: The version of the application
-
+        str: The version of the application as a string.
     """
-
     from . import __version__
     return __version__
 
@@ -30,8 +48,13 @@ def main():
     """
     Entry point of the BashSenpai command-line interface.
 
-    Parses the provided command line arguments and runs any provided commands.
+    This function initializes the BashSenpai object, parses the provided command
+    line arguments, validates and sets the appropriate configurations based on
+    the arguments, and runs any provided commands.
 
+    Raises:
+        SystemExit: If an error occurs while parsing the command line arguments
+            or setting configurations.
     """
 
     # initialize bash senpai

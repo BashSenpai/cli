@@ -4,6 +4,8 @@ BashSenpai - A terminal assistant powered by ChatGPT
 This is the entry point for the BashSenpai command line application. It sets the
 version and initiates the main function.
 
+Copyright 2023 Bogdan Tatarov
+
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
 You may obtain a copy of the License at

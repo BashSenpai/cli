@@ -1,5 +1,35 @@
-# Some of the code is borrowed from python-readchar:
+# This code is part of the BashSenpai project, which is licensed under the
+# Apache License, Version 2.0. Portions of this code are derived from the
+# python-readchar project, which is licensed under the MIT License.
+# Please see the LICENSE file in the root of the BashSenpai project for the
+# full license terms.
+
+# Portions of the code are borrowed from python-readchar:
 # https://github.com/magmax/python-readchar
+# License: MIT (see below)
+
+# MIT Licence
+#
+# Copyright (c) 2022 Miguel Angel Garcia
+#
+# Permission is hereby granted, free of charge, to any person obtaining a copy
+# of this software and associated documentation files (the "Software"), to deal
+# in the Software without restriction, including without limitation the rights
+# to use, copy, modify, merge, publish, distribute, sublicence, and/or sell
+# copies of the Software, and to permit persons to whom the Software is
+# furnished to do so, subject to the following conditions:
+#
+# The above copyright notice and this permission notice shall be included in all
+# copies or substantial portions of the Software.
+#
+# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+# IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+# FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+# AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+# LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+# OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+# SOFTWARE.
+
 import sys
 
 if sys.platform in ('win32', 'cygwin'):

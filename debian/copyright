@@ -1,11 +1,35 @@
 Format: https://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: senpai-cli
+Source: https://github.com/BashSenpai/cli
 
 Files: *
-Copyright: Copyright (c) 2023 BashSenpai Ltd.
+Copyright: Copyright (C) 2023 Bogdan Tatarov
 License: Apache-2.0
 
-Files: debian/*
+Files: lib/user_input.py
+Copyright: Copyright (c) 2022 Miguel Angel Garcia
+License: MIT
+ On the MIT License
+ Permission is hereby granted, free of charge, to any person obtaining a copy
+ of this software and associated documentation files (the "Software"), to deal
+ in the Software without restriction, including without limitation the rights
+ to use, copy, modify, merge, publish, distribute, sublicence, and/or sell
+ copies of the Software, and to permit persons to whom the Software is
+ furnished to do so, subject to the following conditions:
 
+ The above copyright notice and this permission notice shall be included in all
+ copies or substantial portions of the Software.
+
+ THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ SOFTWARE.
+
+License: Apache-2.0
+ On the Apache License 2.0
                                  Apache License
                            Version 2.0, January 2004
                         http://www.apache.org/licenses/
@@ -194,7 +218,7 @@ Files: debian/*
       same "printed page" as the copyright notice for easier
       identification within third-party archives.
 
-   Copyright (c) 2023 BashSenpai Ltd.
+   Copyright (c) 2023 Bogdan Tatarov, Nikolay Dyankov
 
    Licensed under the Apache License, Version 2.0 (the "License");
    you may not use this file except in compliance with the License.

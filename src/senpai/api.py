@@ -119,5 +119,5 @@ class API:
             return {
                 'error': True,
                 'type': 'server',
-                'message': 'Unknown server error occured: {str(e)}',
+                'message': f'Unknown server error occured: {str(e)}',
             }

@@ -131,7 +131,6 @@ class BashSenpai:
             response_data = response
         else:
             response_data = self._parse_response(response)
-            print('\n')
 
         # handle errors
         if response_data.get('error', False):
@@ -330,6 +329,8 @@ class BashSenpai:
                     sys.stdout.flush()
 
                 new_line = False
+
+        print('\n')
 
         if original_response:
             return {

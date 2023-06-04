@@ -115,5 +115,5 @@ class History:
         Only the latest 5 prompts are kept.
         """
         with open(self.path, 'w') as f:
-            # limit to latest 5 prompts only
-            json.dump(self._history[-5:], f)
+            # limit to latest 4 prompts only
+            json.dump(self._history[-4:], f)

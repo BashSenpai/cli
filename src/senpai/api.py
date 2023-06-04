@@ -12,8 +12,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-from requests import post as POST
-from typing import Optional
+from requests import post as POST, Response
+from typing import Optional, Union
 
 from .config import Config
 from .history import History
@@ -35,11 +35,10 @@ class API:
         >>> api = API(config=config, history=history)
         >>> api.login('<your_auth_token>')
         >>> response = api.question('how do I create a new directory')
-        >>> print(response)
     """
 
-    # HOST = 'http://localhost:8000'
-    HOST = 'https://api.bashsenpai.com'
+    # HOST = 'http://localhost:8000/v1'
+    HOST = 'https://api.bashsenpai.com/v1'
 
     def __init__(self, config: Config, history: History) -> None:
         """
@@ -66,18 +65,17 @@ class API:
             dict: JSON response received from the API server indicating the
                 result of the authentication process.
         """
-        # validate the auth token using our API
-        json_data = {
+        data = {
             'token': token,
         }
-        response = POST(f'{self.HOST}/auth/', json=json_data).json()
+        response = POST(f'{self.HOST}/auth/', json=data).json()
         return response
 
     def question(
             self,
             question: str,
             metadata: Optional[dict[str, str]] = None,
-        ) -> dict[str, str]:
+        ) -> Union[Response, dict[str, str]]:
         """
         Sends a question to the BashSenpai API server and returns the response.
 
@@ -87,14 +85,14 @@ class API:
                 user environment metadata.
 
         Returns:
-            dict: JSON response received from the API server containing the
-                answer to the question or error message.
+            Resonse | dict: Response received from the API server containing the
+                answer to the question or an error message.
 
         Raises:
             Exception: In case of server communication issues or unexpected
                 errors.
         """
-        # check if the user is authenticated
+        # check if the user is authenticated first
         token = self._config.get_value('token')
         if not token:
             return {
@@ -105,7 +103,7 @@ class API:
 
         # send the question to our API
         try:
-            json_data = {
+            data = {
                 'token': token,
                 'version': self._config.get_value('version'),
                 'persona': self._config.get_value('persona'),
@@ -113,8 +111,8 @@ class API:
                 'history': self._history.get_history(),
                 'metadata': metadata,
             }
-            response = POST(f'{self.HOST}/prompt/', json=json_data)
-            return response.json()
+            response = POST(f'{self.HOST}/prompt/', json=data, stream=True)
+            return response
         except Exception as e:
             return {
                 'error': True,

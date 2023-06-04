@@ -62,6 +62,29 @@ class History:
             with open(self.path, 'r') as f:
                 self._history = json.load(f)
 
+        # convert old json history
+        for idx, history_message in enumerate(self._history):
+            if isinstance(history_message['answer'], list):
+                answer = ''
+                for line in history_message['answer']:
+                    line_type = line.get('type')
+                    if line_type == 'comment':
+                        answer += '# ' + line['data'] + '\n'
+                    elif line_type == 'command':
+                        answer += '$ ' + line['data'] + '\n'
+                self._history[idx]['answer'] = answer.strip()
+            if isinstance(history_message['persona'], list):
+                answer = ''
+                for line in history_message['persona']:
+                    line_type = line.get('type')
+                    if line_type == 'comment':
+                        answer += '# ' + line['data'] + '\n'
+                    elif line_type == 'command':
+                        answer += '$ ' + line['data'] + '\n'
+                self._history[idx]['persona'] = answer.strip() or None
+        self.write()
+
+
     def add(self, prompt: dict[str, Union[str, list[Any]]]) -> None:
         """
         Adds a new prompt to the user history.

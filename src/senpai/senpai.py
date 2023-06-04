@@ -12,12 +12,12 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import json
 import os
 from pathlib import Path
 import platform
+from requests import Response
 import sys
-import textwrap
-import time
 from typing import Union
 
 from .api import API
@@ -59,6 +59,7 @@ class BashSenpai:
             backend.
         command_color (str): The ANSI color code for commands.
         comment_color (str): The ANSI color code for comments.
+        endline_color (str): THe ANSI color code to end the line.
 
     Usage:
         >>> senpai = BashSenpai()
@@ -85,8 +86,11 @@ class BashSenpai:
         self._api = API(config=self.config, history=self.history)
 
         # parse colors
-        self.command_color = parse_color(self.config.get_value('command_color'))
-        self.comment_color = parse_color(self.config.get_value('comment_color'))
+        command_color = parse_color(self.config.get_value('command_color'))
+        comment_color = parse_color(self.config.get_value('comment_color'))
+
+        self.command_color, self.endline_color = command_color.split('%s')
+        self.comment_color, _ = comment_color.split('%s')
 
     def ask_question(self, question: str) -> None:
         """
@@ -107,7 +111,10 @@ class BashSenpai:
         for _ in range(terminal_height - 1):
             clear_line()
         print(
-            '⌛️ ' + self.comment_color % 'Your request is being processed...',
+            '⌛️ ' +
+            self.comment_color +
+            'Your request is being processed...' +
+            self.endline_color,
             end='',
         )
         sys.stdout.flush()
@@ -119,11 +126,19 @@ class BashSenpai:
         print('')
         clear_line()
 
-        if response.get('error', False):
-            print('Error! %s.' % response.get('message'))
+        # if the response is a dict, it already contains an error
+        if isinstance(response, dict):
+            response_data = response
+        else:
+            response_data = self._parse_response(response)
+            print('\n')
+
+        # handle errors
+        if response_data.get('error', False):
+            print('Error! %s.' % response_data.get('message'))
 
             prog = self.config.get_value('prog')
-            error_type = response.get('type', None)
+            error_type = response_data.get('type', None)
             if error_type == 'auth':
                 print(f'Run: {prog} login')
                 sys.exit(2)
@@ -135,92 +150,30 @@ class BashSenpai:
                 sys.exit(3)
             sys.exit(3)  # Unknown error
 
-        # write the new question/persona pair in the user history
+        # update the history
         self.history.add({
             'question': question,
-            'answer': response.get('response', []),
-            'persona': response.get('persona', []),
+            'answer': response_data.get('response'),
+            'persona': response_data.get('persona'),
         })
         self.history.write()
 
-        # determine whether to show the regular response or the persona one
-        response_data = response.get('response', [])
-        persona_data = response.get('persona', [])
-        if persona_data:
-            response_data = persona_data
-
-        # converts json response to plain-text
-        response_text = ''
-        for response_line in response_data:
-            dtype = response_line.get('type', None)
-            data = response_line.get('data', '').strip()
-            if dtype == 'command':
-                response_text += f'{data}\n'
-            elif dtype == 'comment':
-                data = data.lstrip("#").lstrip()
-                response_text += f'# {data}\n'
-            elif dtype == 'empty_line':
-                response_text += '\n'
-
-        # format the response and collect a list of commands
-        formatted_response = ''
-        commands = list()
-        terminal_size = os.get_terminal_size().columns
-
-        for line in response_text.strip().splitlines():
-            if line.startswith('#'):
-                formatted_response += '\n'.join([
-                    self.comment_color % line
-                    for line in textwrap.wrap(line, terminal_size)
-                ])
-
-            else:
-                # get the full command
-                chunks = line.split(' # ', maxsplit=1)
-                if len(chunks[0].strip()) > 0:
-                    commands.append(chunks[0].strip())
-
-                # text wrap
-                color = self.command_color
-                for i, wrapped in enumerate(textwrap.wrap(line, terminal_size)):
-                    # split lines
-                    if i > 0:
-                        formatted_response += '\n'
-
-                    # handle in-line comments
-                    chunks = wrapped.split(' # ', maxsplit=1)
-                    formatted_response += color % chunks[0]
-                    if len(chunks) > 1:
-                        # once we hit a comment, we change the color
-                        color = self.comment_color
-                        formatted_response += color % f' # {chunks[1]}'
-
-            formatted_response += '\n'
-
-
-        # print the formatted response with a typewriter effect
-        for char in formatted_response:
-            print(char, end='')
-            sys.stdout.flush()
-            if char.isprintable():
-                time.sleep(0.0085)
-        print('')
-        time.sleep(0.55)
-
         # if command execution is enabled, generate the menu and run it
-        if self.config.get_value('execute') and len(commands) > 0:
+        commands = response_data.get('commands')
+        command_color = f'{self.command_color}%s{self.endline_color}'
+        comment_color = f'{self.comment_color}%s{self.endline_color}'
+        if self.config.get_value('execute') and commands:
             menu = Menu(
                 commands=commands,
-                colors=(self.command_color, self.comment_color),
+                colors=(command_color, comment_color),
             )
             menu.display()
 
         # check if the tool is on the latest version, otherwise show a message
-        latest_version = response.get('latest_version', '0')
-        if latest_version > self.config.get_value('version'):
+        latest_version = response_data.get('latest_version')
+        if latest_version and latest_version > self.config.get_value('version'):
             print('')
             print('There is a new version available, please consider updating.')
-
 
     def login(self, token: str) -> None:
         """
@@ -297,3 +250,101 @@ class BashSenpai:
             metadata['shell'] = os.environ.get('SHELL', None)
 
         return metadata
+
+    def _parse_response(self, response: Response) -> dict[str, str]:
+        """
+        Parses the response received from the API.
+
+        If there are no errors, prints the streamed response and returns a
+        dictionary with all parsed data. Otherwise returns the error.
+
+        Args:
+            response (Response): The response object received from the API.
+
+        Returns:
+            dict: JSON data wtih all data parsed from the response.
+        """
+        latest_version = None
+        original_response = None
+        printed_response = ''
+
+        new_line = None
+        new_line_text = ''
+        new_line_type = None
+        commands = list()
+        for chunk in response.iter_lines(chunk_size=None):
+            chunk = json.loads(chunk)
+
+            # check for errors
+            if 'error' in chunk:
+                return chunk
+
+            # parse the version
+            if 'latest_version' in chunk:
+                latest_version = chunk['latest_version']
+                if 'original_response' in chunk:
+                    original_response = chunk['original_response']
+                continue
+
+            if 'end' in chunk and chunk['end']:
+                # append last command and stop
+                if new_line_type == 'command':
+                    commands.append(new_line_text)
+                break
+
+            if 'content' in chunk:
+                printed_response += chunk['content']
+                sub_chunks = chunk['content'].split('\n')
+                for i, sub_chunk in enumerate(sub_chunks):
+                    if i > 0 or not sub_chunk:
+                        new_line = True
+                    if not sub_chunk:
+                        continue
+
+                    if new_line:
+                        if new_line_text:
+                            print(self.endline_color)
+                        if new_line_type == 'command':
+                            commands.append(new_line_text)
+                        new_line_text = ''
+
+                    new_line_text += sub_chunk
+                    # determine line type and separate commands
+                    if new_line:
+                        if sub_chunk.startswith('$'):
+                            new_line_type = 'command'
+                            sub_chunk = sub_chunk.lstrip('$').lstrip()
+                            print(self.command_color, end='')
+                        else:
+                            if new_line_type == 'command':
+                                print('')
+                            print(self.comment_color, end='')
+                            new_line_type = 'comment'
+
+                    # strip command indicator from new line and chunk
+                    new_line_text = new_line_text.lstrip('$')
+                    if new_line_text.startswith(' '):
+                        new_line_text = new_line_text.lstrip()
+                        sub_chunk = sub_chunk.lstrip()
+
+                    if new_line_text and sub_chunk:
+                        print(sub_chunk, end='')
+                        sys.stdout.flush()
+
+                    new_line = False
+
+        if original_response:
+            return {
+                'latest_version': latest_version,
+                'response': original_response,
+                'persona': printed_response,
+                'commands': commands,
+            }
+
+        else:
+            return {
+                'latest_version': latest_version,
+                'response': printed_response,
+                'persona': None,
+                'commands': commands,
+            }

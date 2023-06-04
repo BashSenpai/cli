@@ -21,7 +21,7 @@ limitations under the License.
 
 from .main import main
 
-__version__ = '0.80b'
+__version__ = '0.81b'
 
 if __name__ == '__main__':
     main()

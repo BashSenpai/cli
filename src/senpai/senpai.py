@@ -294,44 +294,42 @@ class BashSenpai:
 
             if 'content' in chunk:
                 printed_response += chunk['content']
-                sub_chunks = chunk['content'].split('\n')
-                for i, sub_chunk in enumerate(sub_chunks):
-                    if i > 0 or not sub_chunk:
-                        new_line = True
-                    if not sub_chunk:
-                        continue
+                chunk = chunk['content']
+                if chunk == '\n':
+                    new_line = True
+                    continue
 
-                    if new_line:
-                        if new_line_text:
-                            print(self.endline_color)
+                if new_line:
+                    if new_line_text:
+                        print(self.endline_color)
+                    if new_line_type == 'command':
+                        commands.append(new_line_text)
+                    new_line_text = ''
+
+                new_line_text += chunk
+                # determine line type and separate commands
+                if new_line:
+                    if chunk.startswith('$'):
+                        new_line_type = 'command'
+                        chunk = chunk.lstrip('$').lstrip()
+                        print(self.command_color, end='')
+                    else:
                         if new_line_type == 'command':
-                            commands.append(new_line_text)
-                        new_line_text = ''
+                            print('')
+                        print(self.comment_color, end='')
+                        new_line_type = 'comment'
 
-                    new_line_text += sub_chunk
-                    # determine line type and separate commands
-                    if new_line:
-                        if sub_chunk.startswith('$'):
-                            new_line_type = 'command'
-                            sub_chunk = sub_chunk.lstrip('$').lstrip()
-                            print(self.command_color, end='')
-                        else:
-                            if new_line_type == 'command':
-                                print('')
-                            print(self.comment_color, end='')
-                            new_line_type = 'comment'
+                # strip command indicator from new line and chunk
+                new_line_text = new_line_text.lstrip('$')
+                if new_line_text.startswith(' '):
+                    new_line_text = new_line_text.lstrip()
+                    chunk = chunk.lstrip()
 
-                    # strip command indicator from new line and chunk
-                    new_line_text = new_line_text.lstrip('$')
-                    if new_line_text.startswith(' '):
-                        new_line_text = new_line_text.lstrip()
-                        sub_chunk = sub_chunk.lstrip()
+                if new_line_text and chunk:
+                    print(chunk, end='')
+                    sys.stdout.flush()
 
-                    if new_line_text and sub_chunk:
-                        print(sub_chunk, end='')
-                        sys.stdout.flush()
-
-                    new_line = False
+                new_line = False
 
         if original_response:
             return {

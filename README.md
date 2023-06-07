@@ -155,8 +155,11 @@ This project is licensed under the Apache 2.0 License. For more information, see
 ## 🗺️ Roadmap
 
 ### Version 0.90 (planned)
+- [ ] Print current user configuration
+- [ ] Text-only mode
 - [ ] Provide instructions of how to update when a new version is available (based on OS)
 - [ ] Generate docker compose configuration files
+- [ ] Generate common examples for a specific command
 - [ ] Windows code signing
 
 ### Version 0.80 (finished)
@@ -176,6 +179,9 @@ This project is licensed under the Apache 2.0 License. For more information, see
 ### Other planned features
 
 - [ ] Multi-language support: delivered by ChatGPT
+- [ ] Alpine Linux packages
+- [ ] openSUSE packages
+- [ ] BSD-based distros packages
 
 ## 👨‍💻 Maintainers
 

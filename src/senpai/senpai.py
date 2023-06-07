@@ -101,6 +101,10 @@ class BashSenpai:
 
         Args:
             question (str): The question to send to the API.
+
+        Raises:
+            SystemExit: If an error occurs while parsing the response received
+                from the API.
         """
         # separate the output from the shell command with a single line
         print('')
@@ -140,14 +144,14 @@ class BashSenpai:
             error_type = response_data.get('type', None)
             if error_type == 'auth':
                 print(f'Run: {prog} login')
-                sys.exit(2)
+                raise SystemExit(2)
             elif error_type in ['timeout', 'server']:
                 print('Try running the same command again a little later.')
-                sys.exit(3)
+                raise SystemExit(3)
             elif error_type == 'history':
                 print(f'Try running: {prog} -n <question>')
-                sys.exit(3)
-            sys.exit(3)  # Unknown error
+                raise SystemExit(3)
+            raise SystemExit(3)  # Unknown error
 
         # update the history
         self.history.add({
@@ -174,12 +178,18 @@ class BashSenpai:
             print('')
             print('There is a new version available, please consider updating.')
 
+    def explain(self, command: str) -> None:
+        """TODO: """
+
     def login(self, token: str) -> None:
         """
         Validate the auth token and store it in the config file.
 
         Args:
             token (str): The auth token provided by the user.
+
+        Raises:
+            SystemExit: If there is an error with the authentication process.
         """
         # send an API call with the auth token and get a JSON response
         response = self._api.login(token)
@@ -193,7 +203,7 @@ class BashSenpai:
             elif response['error']['code'] == 3:
                 print('Error! Your user doesn\'t have a valid subscription.')
                 print(f'Visit {self.DASHBOARD_URL} to subscribe.')
-            sys.exit(2)
+            raise SystemExit(2)
 
         # store the auth token in the config file
         self.config.set_value('token', token)
@@ -261,7 +271,7 @@ class BashSenpai:
             response (Response): The response object received from the API.
 
         Returns:
-            dict: JSON data wtih all data parsed from the response.
+            dict: JSON data wtih all the parsed data from the response.
         """
         latest_version = None
         original_response = None

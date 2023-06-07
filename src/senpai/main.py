@@ -62,9 +62,9 @@ def main():
     """
     Entry point of the BashSenpai command-line interface.
 
-    This function initializes the BashSenpai object, parses the provided command
-    line arguments, validates and sets the appropriate configurations based on
-    the arguments, and runs any provided commands.
+    This function initializes the BashSenpai object, parses the provided
+    command-line arguments, validates and sets the appropriate configurations
+    based on the arguments, and handles any provided prompt.
 
     Raises:
         SystemExit: If an error occurs while parsing the command line arguments
@@ -77,24 +77,27 @@ def main():
     # parse any command-line arguments
     parser = argparse.ArgumentParser(
         prog='senpai',
-        usage='%(prog)s [options] command',
+        usage='%(prog)s [options] prompt',
         description='BashSenpai command-line interface.',
         epilog='\n'.join([
-            'available colors:',
+            'colors:',
             '  black, white, gray, red, greeen, yellow, blue, magenta and cyan',
-            '  there are also brighter versions of each color, for example: "bright blue"',
-            '  you can also make colors bold, for example: "bold red" or "bold bright cyan"',
+            '  There are also brighter versions of each color, for example: "bright blue"',
+            '  You can also make colors bold, for example: "bold red" or "bold bright cyan"',
             '',
-            'available commands:',
-            '  <ask a question>',
-            '  login',
-            '  become <persona>     # use "default" to revert back to normal messages',
+            'prompts:',
+            '  login                authenticate using your auth token',
+            '  <question>           ask any shell-related question using common language',
+            '  explain <command>    show most common use cases for a specific command',
+            '  become <persona>     change the persona of BashSenpai, use "default" to reset',
             '',
             'example usage:',
+            '  %(prog)s login',
             '  %(prog)s become angry pirate',
+            '  %(prog)s explain tar',
             '  %(prog)s how to disable ssh connections',
             '',
-            'For more information, visit: https://bashsenpai.com/'
+            'For more information, visit: https://bashsenpai.com/docs'
         ]),
         formatter_class=SimpleNargsFormatter,
     )
@@ -150,14 +153,14 @@ def main():
         type=str,
         nargs='*',
         metavar='<prompt>',
-        help='question to ask or command to execute',
+        help='ask a question or execute a special command',
     )
 
     # check for empty arguments first
     if len(sys.argv) < 2:
         print('Error! No arguments provided. For list of available options, run:')
         print(f'{parser.prog} --help')
-        sys.exit(1)
+        raise SystemExit(1)
 
     # parse the arguments
     args = parser.parse_args()
@@ -179,7 +182,7 @@ def main():
         for chunk in command_color.split():
             if not chunk in color_chunks:
                 print(f'Error! Can\'t parse "{chunk}".')
-                sys.exit(1)
+                raise SystemExit(1)
         senpai.config.set_value('command_color', command_color)
         senpai.config.write()
 
@@ -189,7 +192,7 @@ def main():
         for chunk in comment_color.split():
             if not chunk in color_chunks:
                 print(f'Error! Can\'t parse "{chunk}".')
-                sys.exit(1)
+                raise SystemExit(1)
         senpai.config.set_value('comment_color', comment_color)
         senpai.config.write()
 
@@ -213,13 +216,13 @@ def main():
 
     # parse the prompt
     if not args.prompt:
-        sys.exit(0)
+        raise SystemExit(0)
 
     prompt = args.prompt[0]
     if prompt == 'login':
         if len(args.prompt) > 1:
-            print('Error! The login command takes no extra arguments.')
-            sys.exit(1)
+            print('Error! The "login" prompt takes no extra arguments.')
+            raise SystemExit(1)
 
         # read the auth token from the stdin and send a login request
         token = input('Auth token: ')
@@ -228,12 +231,18 @@ def main():
     elif prompt == 'become':
         if len(args.prompt) == 1:
             print('Error! Please provide the persona you wish BashSenpai to use.')
-            sys.exit(1)
+            raise SystemExit(1)
 
         persona = ' '.join(args.prompt[1:])
         senpai.config.set_value('persona', persona)
         senpai.config.write()
         print('New persona confirmed.')
+
+    elif prompt == 'explain' and len(args.prompt) < 3:
+        if len(args.prompt) == 1:
+            print('Error! The "explain" prompt takes one extra argument in the form of a command name.')
+            raise SystemExit(1)
+        senpai.explain(args.prompt[1])
 
     else:
         question = ' '.join(args.prompt)

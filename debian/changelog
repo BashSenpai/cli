@@ -1,3 +1,10 @@
+senpai-cli (0.81b) lunar; urgency=medium
+
+  * Update: stream prompt responses
+  * Update: simplify API calls
+
+ -- Bogdan Tatarov <bogdan@tatarov.me>  Wed, 07 Jun 2023 18:02:00 +0300
+
 senpai-cli (0.80b) lunar; urgency=medium
 
   * Feature: prettier output style

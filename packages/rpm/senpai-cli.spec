@@ -4,7 +4,7 @@ Release:        1
 Summary:        BashSenpai command-line interface
 
 License:        Apache-2.0
-Source0:        %{name}-%{version}.tar.gz
+Source0:        https://github.com/BashSenpai/cli/archive/refs/tags/v%{version}.tar.gz
 
 BuildArch:      noarch
 
@@ -13,15 +13,12 @@ BuildRequires:  python3-setuptools
 BuildRequires:  python3-requests
 BuildRequires:  python3-toml
 
-#Requires:       python3-requests
-#Requires:       python3-toml
-
 %description
 BashSenpai is a terminal assistant powered by ChatGPT that transforms instructions into ready-to-use commands.
 
 
 %prep
-%autosetup
+%autosetup -n cli-%{version}
 
 
 %build
@@ -58,7 +55,7 @@ BashSenpai is a terminal assistant powered by ChatGPT that transforms instructio
 - Fix: proper color escaping for readline (bogdan@tatarov.me)
 * Sat May 27 2023 Bogdan Tatarov <bogdan@tatarov.me> 0.77b-1
 - Feature: better error handling on API error (bogdan@tatarov.me)
-* Fri May 27 2023 Bogdan Tatarov <bogdan@tatarov.me> 0.75b-1
+* Sat May 27 2023 Bogdan Tatarov <bogdan@tatarov.me> 0.75b-1
 - Feature: menu to execute any provided command directly in the terminal
 * Mon May 22 2023 Bogdan Tatarov <bogdan@tatarov.me> 0.71b-1
 - various changes in metadata (bogdan@tatarov.me)

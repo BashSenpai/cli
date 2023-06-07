@@ -1,4 +1,3 @@
-#!/bin/bash
 # Copyright 2023 Bogdan Tatarov
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,23 +12,9 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-export PYTHONPATH="$( pwd -P )/../src"
+import colorama
+from senpai.main import main
 
-rm -rf ../dist/win
-mkdir -p ../dist/win/build
-cp run.py ../dist/win
-cp install.iss ../dist/win
-
-pushd ../dist/win > /dev/null
-cp -a ../../src/senpai senpai
-
-pyinstaller --clean --onefile \
-            --name senpai \
-             --noconfirm --log-level ERROR \
-            --distpath . --workpath ./build \
-            --icon ../../media/app.ico \
-            run.py
-rm -rf ../dist/build
-
-iscc install.iss
-popd > /dev/null
+if __name__ == '__main__':
+    colorama.just_fix_windows_console()
+    main()

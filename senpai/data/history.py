@@ -64,7 +64,7 @@ class History:
 
         # convert old json history
         for idx, history_message in enumerate(self._history):
-            if isinstance(history_message['answer'], list):
+            if isinstance(history_message.get('answer'), list):
                 answer = ''
                 for line in history_message['answer']:
                     line_type = line.get('type')
@@ -73,7 +73,7 @@ class History:
                     elif line_type == 'command':
                         answer += '$ ' + line['data'] + '\n'
                 self._history[idx]['answer'] = answer.strip()
-            if isinstance(history_message['persona'], list):
+            if isinstance(history_message.get('persona'), list):
                 answer = ''
                 for line in history_message['persona']:
                     line_type = line.get('type')

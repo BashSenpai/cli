@@ -21,16 +21,15 @@ import sys
 from typing import Union
 
 from .api import API
-from .config import Config
-from .history import History
-from .menu import Menu
+from .data.config import Config
+from .data.history import History
 from .lib.color import parse_color
 from .lib.user_input import clear_line
+from .menu import Menu
 
 
 # TODO: refactor all code for repetitions and missing docstrings
 # TODO: move all printing to screen.py
-# TODO: move config.py and history.py in a separate data/ directory
 
 
 # default config storage based on OS type

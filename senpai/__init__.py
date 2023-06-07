@@ -12,9 +12,4 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-import colorama
-from senpai import main
-
-if __name__ == '__main__':
-    colorama.just_fix_windows_console()
-    main()
+__version__ = '0.82b'

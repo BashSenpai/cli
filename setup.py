@@ -14,7 +14,7 @@
 
 from setuptools import setup, find_packages
 
-from src.senpai.main import get_version
+from senpai.main import get_version
 
 
 def readme():
@@ -32,9 +32,8 @@ setup(
     author_email='bogdan@tatarov.me',
     license='Apache-2.0',
     install_requires=('requests', 'toml'),
-    packages=find_packages(where='src'),
-    package_dir = {'': 'src'},
+    packages=find_packages(),
     entry_points=dict(
-        console_scripts=['senpai=senpai:main']
+        console_scripts=['senpai=senpai.main:main']
     )
 )

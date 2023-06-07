@@ -15,8 +15,8 @@
 from requests import post as POST, Response
 from typing import Optional, Union
 
-from .config import Config
-from .history import History
+from .data.config import Config
+from .data.history import History
 
 
 class API:

@@ -28,6 +28,11 @@ from .lib.color import parse_color
 from .lib.user_input import clear_line
 
 
+# TODO: refactor all code for repetitions and missing docstrings
+# TODO: move all printing to screen.py
+# TODO: move config.py and history.py in a separate data/ directory
+
+
 # default config storage based on OS type
 if sys.platform in ('win32', 'cygwin'):
     CONFIG_BASE = Path(os.path.normpath(os.getenv('LOCALAPPDATA')))
@@ -106,22 +111,7 @@ class BashSenpai:
             SystemExit: If an error occurs while parsing the response received
                 from the API.
         """
-        # separate the output from the shell command with a single line
-        print('')
-
-        # show the loading prompt
-        terminal_height = os.get_terminal_size().lines
-        print('\n' * (terminal_height - 1), end='')
-        for _ in range(terminal_height - 1):
-            clear_line()
-        print(
-            '⌛️ ' +
-            self.comment_color +
-            'Your request is being processed...' +
-            self.endline_color,
-            end='',
-        )
-        sys.stdout.flush()
+        self._print_loading()
 
         # send an API call with the question and get a plain-text response
         response = self._api.question(question, metadata=self._get_metadata())
@@ -179,7 +169,18 @@ class BashSenpai:
             print('There is a new version available, please consider updating.')
 
     def explain(self, command: str) -> None:
-        """TODO: """
+        """
+        Send a request to the BashSenpai API to explain the usage of a shell
+        command and print a formatted response.
+
+        Args:
+            command (str): The command to send to the API.
+
+        Raises:
+            SystemExit: If an error occurs while parsing the response received
+                from the API.
+        """
+        self._print_loading()
 
     def login(self, token: str) -> None:
         """
@@ -357,3 +358,24 @@ class BashSenpai:
                 'persona': None,
                 'commands': commands,
             }
+
+    def _print_loading(self) -> None:
+        """
+        Show a loading message while waiting for the response from the API.
+        """
+        # separate the output from the shell command with a single line
+        print('')
+
+        # show the loading prompt
+        terminal_height = os.get_terminal_size().lines
+        print('\n' * (terminal_height - 1), end='')
+        for _ in range(terminal_height - 1):
+            clear_line()
+        print(
+            '⌛️ ' +
+            self.comment_color +
+            'Your request is being processed...' +
+            self.endline_color,
+            end='',
+        )
+        sys.stdout.flush()

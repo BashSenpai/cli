@@ -220,8 +220,10 @@ class BashSenpai:
 
         tasks = (run_prompt(), self.terminal.show_loading(),)
         try:
+            print('\x1B[?25l', end='')  # hide cursor
             await asyncio.gather(*tasks)
         except asyncio.CancelledError:
+            print('\x1B[?25h', end='')  # show cursor
             self.terminal.hide_loading()
             return response
 

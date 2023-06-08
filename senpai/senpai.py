@@ -67,7 +67,8 @@ class BashSenpai:
 
     Usage:
         >>> senpai = BashSenpai()
-        >>> senpai.ask_question('How do I list files in a directory')
+        >>> senpai.ask_question('how do I list files in a directory')
+        >>> senpai.explain('tar')
     """
 
     CONFIG_DIR = CONFIG_BASE / 'senpai'
@@ -125,22 +126,8 @@ class BashSenpai:
         else:
             response_data = self._parse_response(response)
 
-        # handle errors
-        if response_data.get('error', False):
-            print('Error! %s.' % response_data.get('message'))
-
-            prog = self.config.get_value('prog')
-            error_type = response_data.get('type', None)
-            if error_type == 'auth':
-                print(f'Run: {prog} login')
-                raise SystemExit(2)
-            elif error_type in ['timeout', 'server']:
-                print('Try running the same command again a little later.')
-                raise SystemExit(3)
-            elif error_type == 'history':
-                print(f'Try running: {prog} -n <question>')
-                raise SystemExit(3)
-            raise SystemExit(3)  # Unknown error
+        # check the response for errors
+        self._handle_response_errors(response_data)
 
         # update the history
         self.history.add({
@@ -162,15 +149,12 @@ class BashSenpai:
             menu.display()
 
         # check if the tool is on the latest version, otherwise show a message
-        latest_version = response_data.get('latest_version')
-        if latest_version and latest_version > self.config.get_value('version'):
-            print('')
-            print('There is a new version available, please consider updating.')
+        self._check_version(response_data.get('version'))
 
     def explain(self, command: str) -> None:
         """
         Send a request to the BashSenpai API to explain the usage of a shell
-        command and print a formatted response.
+        command or a tool and print a formatted response.
 
         Args:
             command (str): The command to send to the API.
@@ -180,6 +164,27 @@ class BashSenpai:
                 from the API.
         """
         self._print_loading()
+
+        # send an API call with the command to explain
+        response = self._api.explain(command)
+
+        # hide the loading prompt
+        print('')
+        clear_line()
+
+        # if the response is a dict, it already contains an error
+        if isinstance(response, dict):
+            response_data = response
+        else:
+            response_data = self._parse_response(response)
+
+        # check the response for errors
+        self._handle_response_errors(response_data)
+
+        # TODO: different interactive menu
+
+        # check if the tool is on the latest version, otherwise show a message
+        self._check_version(response_data.get('version'))
 
     def login(self, token: str) -> None:
         """
@@ -210,6 +215,17 @@ class BashSenpai:
         self.config.write()
 
         print('Authentication successful.')
+
+    def _check_version(self, latest_version: str) -> None:
+        """
+        Check and notify if there's a new version of the CLI available.
+
+        Args:
+            latest_version (str): The latest version as a string.
+        """
+        if latest_version and latest_version > self.config.get_value('version'):
+            print('')
+            print('There is a new version available, please consider updating.')
 
     def _get_metadata(self) -> Union[dict[str, str], None]:
         """
@@ -259,6 +275,32 @@ class BashSenpai:
             metadata['shell'] = os.environ.get('SHELL', None)
 
         return metadata
+
+    def _handle_response_errors(self, response_data: dict[str, str]) -> None:
+        """
+        Validate the API response and handle errors.
+
+        Args:
+            response_data (dict): The response data from the API.
+
+        Raises:
+            SystemExit: If an error is found in the response data.
+        """
+        if response_data.get('error', False):
+            print('Error! %s.' % response_data.get('message'))
+
+            prog = self.config.get_value('prog')
+            error_type = response_data.get('type', None)
+            if error_type == 'auth':
+                print(f'Run: {prog} login')
+                raise SystemExit(2)
+            elif error_type in ['timeout', 'server']:
+                print('Try running the same command again a little later.')
+                raise SystemExit(3)
+            elif error_type == 'history':
+                print(f'Try running: {prog} -n <question>')
+                raise SystemExit(3)
+            raise SystemExit(3)  # Unknown error
 
     def _parse_response(self, response: Response) -> dict[str, str]:
         """

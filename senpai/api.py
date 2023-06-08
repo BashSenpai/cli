@@ -35,6 +35,7 @@ class API:
         >>> api = API(config=config, history=history)
         >>> api.login('<your_auth_token>')
         >>> response = api.question('how do I create a new directory')
+        >>> response = api.explain('ffmpeg')
     """
 
     # HOST = 'http://localhost:8000/v1'
@@ -52,6 +53,46 @@ class API:
         """
         self._config = config
         self._history = history
+
+    def explain(self, command: str) -> Union[Response, dict[str, str]]:
+        """
+        Explains the given command by querying the BashSenpai API.
+
+        Args:
+            command (str): The command to be explained.
+
+        Returns:
+            Resonse | dict: The API response or an error message if the user is
+                not authenticated or if an unknown server error occurs.
+
+        Raises:
+            Exception: In case of server communication issues or other errors.
+        """
+        # check if the user is authenticated first
+        token = self._config.get_value('token')
+        if not token:
+            return {
+                'error': True,
+                'type': 'auth',
+                'message': 'You are not authenticated',
+            }
+
+        # send the question to our API
+        try:
+            data = {
+                'token': token,
+                'version': self._config.get_value('version'),
+                'persona': self._config.get_value('persona'),
+                'command': command,
+            }
+            response = POST(f'{self.HOST}/explain/', json=data, stream=True)
+            return response
+        except Exception as e:
+            return {
+                'error': True,
+                'type': 'server',
+                'message': f'Unknown server error occured: {str(e)}',
+            }
 
     def login(self, token: str) -> dict[str, str]:
         """
@@ -89,8 +130,7 @@ class API:
                 answer to the question or an error message.
 
         Raises:
-            Exception: In case of server communication issues or unexpected
-                errors.
+            Exception: In case of server communication issues or other errors.
         """
         # check if the user is authenticated first
         token = self._config.get_value('token')

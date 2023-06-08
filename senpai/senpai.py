@@ -12,13 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import asyncio
 import json
 import os
 from pathlib import Path
 import platform
 from requests import Response
 import sys
-from typing import Union
+from typing import Any, Callable, Union
 
 from .api import API
 from .data.config import Config
@@ -27,8 +28,7 @@ from .lib.color import parse_color
 from .terminal import Terminal
 
 
-# TODO: refactor all code for repetitions and missing docstrings
-# TODO: move all printing to screen.py
+# TODO: move all printing to screen.py (parse_response method)
 
 
 # default config storage based on OS type
@@ -100,7 +100,7 @@ class BashSenpai:
         self.comment_color, _ = comment_color.split('%s')
 
 
-    def ask_question(self, question: str) -> None:
+    async def ask_question(self, question: str) -> None:
         """
         Send a question to the BashSenpai API and print a formatted response.
 
@@ -114,39 +114,35 @@ class BashSenpai:
             SystemExit: If an error occurs while parsing the response received
                 from the API.
         """
-        self.terminal.show_loading()
-
-        # send an API call with the question and get a plain-text response
-        response = self._api.question(question, metadata=self._get_metadata())
-
-        self.terminal.hide_loading()
+        # send an API call with a question and get the response
+        metadata = self._get_metadata()
+        task = self._api.question
+        response = await self._run_async_prompt(task, question, metadata)
 
         # if the response is a dict, it already contains an error
-        if isinstance(response, dict):
-            response_data = response
-        else:
-            response_data = self._parse_response(response)
+        if not isinstance(response, dict):
+            response = self._parse_response(response)
 
         # check the response for errors
-        self._handle_response_errors(response_data)
+        self._handle_response_errors(response)
 
         # update the history
         self.history.add({
             'question': question,
-            'answer': response_data.get('response'),
-            'persona': response_data.get('persona'),
+            'answer': response.get('response'),
+            'persona': response.get('persona'),
         })
         self.history.write()
 
         # if command execution is enabled, generate the menu and run it
-        commands = response_data.get('commands')
+        commands = response.get('commands')
         if self.config.get_value('execute') and commands:
             self.terminal.show_menu(commands=commands)
 
         # check if the tool is on the latest version, otherwise show a message
-        self._check_version(response_data.get('version'))
+        self._check_version(response.get('version'))
 
-    def explain(self, command: str) -> None:
+    async def explain(self, command: str) -> None:
         """
         Send a request to the BashSenpai API to explain the usage of a shell
         command or a tool and print a formatted response.
@@ -158,28 +154,22 @@ class BashSenpai:
             SystemExit: If an error occurs while parsing the response received
                 from the API.
         """
-        self.terminal.show_loading()
-
-        # send an API call with the command to explain
-        response = self._api.explain(command)
-
-        self.terminal.hide_loading()
+        # send an async API call with the command
+        response = await self._run_async_prompt(self._api.explain, command)
 
         # if the response is a dict, it already contains an error
-        if isinstance(response, dict):
-            response_data = response
-        else:
-            response_data = self._parse_response(response)
+        if not isinstance(response, dict):
+            response = self._parse_response(response)
 
         # check the response for errors
-        self._handle_response_errors(response_data)
+        self._handle_response_errors(response)
 
         # TODO: different interactive menu
 
         # check if the tool is on the latest version, otherwise show a message
-        self._check_version(response_data.get('version'))
+        self._check_version(response.get('version'))
 
-    def login(self, token: str) -> None:
+    async def login(self, token: str) -> None:
         """
         Validate the auth token and store it in the config file.
 
@@ -207,6 +197,33 @@ class BashSenpai:
         self.config.write()
 
         print('Authentication successful.')
+
+    async def _run_async_prompt(
+        self,
+        prompt_fn: Callable,
+        *args,
+    ) -> Union[Response, dict[str, str]]:
+        """
+        Animates the loading dots while waiting for response.
+
+        Args:
+            prompt_fn (Callable): The API method to call
+            *args: optional arguments to pass to the call
+
+        Returns:
+            Response | dict[str, str]: An API call response or an error.
+        """
+        async def run_prompt():
+            global response
+            response = await prompt_fn(*args)
+            raise asyncio.CancelledError
+
+        tasks = (run_prompt(), self.terminal.show_loading(),)
+        try:
+            await asyncio.gather(*tasks)
+        except asyncio.CancelledError:
+            self.terminal.hide_loading()
+            return response
 
     def _check_version(self, latest_version: str) -> None:
         """

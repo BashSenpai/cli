@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import asyncio
 from requests import post as POST, Response
 from typing import Optional, Union
 
@@ -54,7 +55,7 @@ class API:
         self._config = config
         self._history = history
 
-    def explain(self, command: str) -> Union[Response, dict[str, str]]:
+    async def explain(self, command: str) -> Union[Response, dict[str, str]]:
         """
         Explains the given command by querying the BashSenpai API.
 
@@ -85,8 +86,9 @@ class API:
                 'persona': self._config.get_value('persona'),
                 'command': command,
             }
-            response = POST(f'{self.HOST}/explain/', json=data, stream=True)
-            return response
+            return await asyncio.to_thread(
+                POST, f'{self.HOST}/explain/', json=data, stream=True,
+            )
         except Exception as e:
             return {
                 'error': True,
@@ -94,7 +96,7 @@ class API:
                 'message': f'Unknown server error occured: {str(e)}',
             }
 
-    def login(self, token: str) -> dict[str, str]:
+    async def login(self, token: str) -> dict[str, str]:
         """
         Authenticates the user with the BashSenpai API server using the provided
         token.
@@ -109,10 +111,10 @@ class API:
         data = {
             'token': token,
         }
-        response = POST(f'{self.HOST}/auth/', json=data).json()
-        return response
+        response = await asyncio.to_thread(POST, f'{self.HOST}/auth/', json=data)
+        return response.json()
 
-    def question(
+    async def question(
             self,
             question: str,
             metadata: Optional[dict[str, str]] = None,
@@ -151,8 +153,9 @@ class API:
                 'history': self._history.get_history(),
                 'metadata': metadata,
             }
-            response = POST(f'{self.HOST}/prompt/', json=data, stream=True)
-            return response
+            return await asyncio.to_thread(
+                POST, f'{self.HOST}/prompt/', json=data, stream=True,
+            )
         except Exception as e:
             return {
                 'error': True,

@@ -19,6 +19,7 @@ See the License for the specific language governing permissions and
 limitations under the License.
 """
 
+import asyncio
 import argparse
 import sys
 
@@ -65,7 +66,7 @@ def get_version() -> str:
     return __version__
 
 
-def main():
+async def main():
     """
     Entry point of the BashSenpai command-line interface.
 
@@ -233,7 +234,7 @@ def main():
 
         # read the auth token from the stdin and send a login request
         token = input('Auth token: ')
-        senpai.login(token)
+        await senpai.login(token)
 
     elif prompt == 'become':
         if len(args.prompt) == 1:
@@ -249,12 +250,12 @@ def main():
         if len(args.prompt) == 1:
             print('Error! The "explain" prompt takes one extra argument in the form of a command name.')
             raise SystemExit(1)
-        senpai.explain(args.prompt[1])
+        await senpai.explain(args.prompt[1])
 
     else:
         question = ' '.join(args.prompt)
-        senpai.ask_question(question)
+        await senpai.ask_question(question)
 
 
 if __name__ == '__main__':
-    main()
+    asyncio.run(main())

@@ -12,6 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+import asyncio
 import os
 import subprocess
 import sys
@@ -39,8 +40,6 @@ class Terminal:
 
     Usage:
         >>> terminal = Terminal(command_color, comment_color)
-        >>> terminal.show_loading()
-        >>> terminal.hide_loading()
         >>> terminal.show_menu()
     """
 
@@ -63,10 +62,9 @@ class Terminal:
 
     def hide_loading(self) -> None:
         """Hide the loading message."""
-        print('')
         self.clear_line()
 
-    def show_loading(self) -> None:
+    async def show_loading(self) -> None:
         """
         Show a loading message while waiting for the response from the API.
         """
@@ -78,11 +76,28 @@ class Terminal:
         print('\n' * (terminal_height - 1), end='')
         for _ in range(terminal_height - 1):
             self.clear_line()
-        print(
-            self.comment_color % '⌛️ Your request is being processed...',
-            end='',
-        )
-        sys.stdout.flush()
+
+        # animate the dots...
+        i = 0
+        backwards = True
+        while True:
+            print(
+                self.comment_color % '⌛️ Your request is being processed',
+                end='',
+            )
+            if backwards:
+                print('.' * (2 - i))
+            else:
+                print('.' * (i + 1))
+            sys.stdout.flush()
+
+            i += 1
+            if i == 3:
+                backwards = not backwards
+                i = 0
+
+            await asyncio.sleep(0.55)
+            self.clear_line()
 
     def show_menu(self, commands: list[str]) -> None:
         """

@@ -179,7 +179,7 @@ class BashSenpai:
         Raises:
             SystemExit: If there is an error with the authentication process.
         """
-        response = self._api.login(token)
+        response = await self._api.login(token)
 
         if not response['success']:
             if response['error']['code'] == 1:

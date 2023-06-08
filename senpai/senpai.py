@@ -24,8 +24,7 @@ from .api import API
 from .data.config import Config
 from .data.history import History
 from .lib.color import parse_color
-from .lib.user_input import clear_line
-from .menu import Menu
+from .terminal import Terminal
 
 
 # TODO: refactor all code for repetitions and missing docstrings
@@ -50,7 +49,7 @@ class BashSenpai:
     BashSenpai interacts with an API to send questions and receive formatted
     responses. The API provides concise explanations and commands for Linux
     shell environments using ChatGPT as a backend. It maintains a configuration
-    file, user history, generates a menu for executing returned commands, and
+    file, user history, shows the menu for executing returned commands, and
     formats response output with configurable colors converted to ANSI-escaped
     sequences.
 
@@ -59,6 +58,7 @@ class BashSenpai:
         DASHBOARD_URL (str): The URL for the dashboard of the application.
         config (Config): The configuration object managing the settings..
         history (History): The history object managing the user's interactions.
+        terminal (Terminal): Object for manipulating the content on the screen.
         _api (API): The private API object managing the communication with the
             backend.
         command_color (str): The ANSI color code for commands.
@@ -94,15 +94,18 @@ class BashSenpai:
         command_color = parse_color(self.config.get_value('command_color'))
         comment_color = parse_color(self.config.get_value('comment_color'))
 
+        self.terminal = Terminal(command_color, comment_color)
+
         self.command_color, self.endline_color = command_color.split('%s')
         self.comment_color, _ = comment_color.split('%s')
+
 
     def ask_question(self, question: str) -> None:
         """
         Send a question to the BashSenpai API and print a formatted response.
 
-        If the user has command execution enabled, generates a menu for
-        executing each command.
+        If the user has command execution enabled, shows the menu for executing
+        each command.
 
         Args:
             question (str): The question to send to the API.
@@ -111,14 +114,12 @@ class BashSenpai:
             SystemExit: If an error occurs while parsing the response received
                 from the API.
         """
-        self._print_loading()
+        self.terminal.show_loading()
 
         # send an API call with the question and get a plain-text response
         response = self._api.question(question, metadata=self._get_metadata())
 
-        # hide the loading prompt
-        print('')
-        clear_line()
+        self.terminal.hide_loading()
 
         # if the response is a dict, it already contains an error
         if isinstance(response, dict):
@@ -139,14 +140,8 @@ class BashSenpai:
 
         # if command execution is enabled, generate the menu and run it
         commands = response_data.get('commands')
-        command_color = f'{self.command_color}%s{self.endline_color}'
-        comment_color = f'{self.comment_color}%s{self.endline_color}'
         if self.config.get_value('execute') and commands:
-            menu = Menu(
-                commands=commands,
-                colors=(command_color, comment_color),
-            )
-            menu.display()
+            self.terminal.show_menu(commands=commands)
 
         # check if the tool is on the latest version, otherwise show a message
         self._check_version(response_data.get('version'))
@@ -163,14 +158,12 @@ class BashSenpai:
             SystemExit: If an error occurs while parsing the response received
                 from the API.
         """
-        self._print_loading()
+        self.terminal.show_loading()
 
         # send an API call with the command to explain
         response = self._api.explain(command)
 
-        # hide the loading prompt
-        print('')
-        clear_line()
+        self.terminal.hide_loading()
 
         # if the response is a dict, it already contains an error
         if isinstance(response, dict):
@@ -196,7 +189,6 @@ class BashSenpai:
         Raises:
             SystemExit: If there is an error with the authentication process.
         """
-        # send an API call with the auth token and get a JSON response
         response = self._api.login(token)
 
         if not response['success']:
@@ -399,24 +391,3 @@ class BashSenpai:
                 'persona': None,
                 'commands': commands,
             }
-
-    def _print_loading(self) -> None:
-        """
-        Show a loading message while waiting for the response from the API.
-        """
-        # separate the output from the shell command with a single line
-        print('')
-
-        # show the loading prompt
-        terminal_height = os.get_terminal_size().lines
-        print('\n' * (terminal_height - 1), end='')
-        for _ in range(terminal_height - 1):
-            clear_line()
-        print(
-            '⌛️ ' +
-            self.comment_color +
-            'Your request is being processed...' +
-            self.endline_color,
-            end='',
-        )
-        sys.stdout.flush()

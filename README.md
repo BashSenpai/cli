@@ -159,8 +159,7 @@ This project is licensed under the Apache 2.0 License. For more information, see
 - [ ] Text-only mode
 - [ ] Provide instructions of how to update when a new version is available (based on OS)
 - [ ] Generate docker compose configuration files
-- [ ] Generate common examples for a specific command
-- [ ] Windows code signing
+- [x] Generate common examples for a specific command
 
 ### Version 0.80 (finished)
 
@@ -182,6 +181,7 @@ This project is licensed under the Apache 2.0 License. For more information, see
 - [ ] Alpine Linux packages
 - [ ] openSUSE packages
 - [ ] BSD-based distros packages
+- [ ] Windows code signing
 
 ## 👨‍💻 Maintainers
 

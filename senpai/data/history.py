@@ -37,7 +37,6 @@ class History:
         >>> })
         >>> history.write()
         >>> prompts = history.get_history()
-        >>> print(prompts)
     """
 
     def __init__(self, path: Path) -> None:

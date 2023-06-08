@@ -65,13 +65,6 @@ else:  # linux, macos
         ENTER = '\x0A'
 
 
-def clear_line() -> None:
-    """
-    Clears any text from the last line in the console.
-    """
-    print(f'\x1B[1A\x1B[2K\r', end='')
-
-
 def readchar() -> str:
     """
     Reads a single character from the standard input.

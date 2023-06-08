@@ -14,13 +14,15 @@
 
 import os
 import subprocess
+import sys
 
-from .lib.user_input import clear_line, readkey, readinput, BASE_KEYS, OS_KEYS
+from .lib.user_input import readkey, readinput, BASE_KEYS, OS_KEYS
 
 
-class Menu:
+class Terminal:
     """
-    A command execution menu.
+    An object that handles all terminal manipulations and the command execution
+    menu.
 
     This class provides an interactive menu for executing commands provided as a
     list of strings. The menu runs in an endless loop until the user
@@ -29,38 +31,60 @@ class Menu:
     Attributes:
         commands (list[str]): A list of commands provided to the menu to be run.
         index (int): The index of the currently selected command in the list.
-        command_color (str): A string representing the ANSI escape sequence
-            for coloring command texts.
-        comment_color (str): A string representing the ANSI escape sequence
-            for coloring comment texts.
+        command_color (str): The ANSI color code used for printing for commands.
+        comment_color (str): The ANSI color code for for printing comments.
         terminal_size (int): The width of the terminal in characters.
-        extra_lines (int): The extra lines that need to be cleared command
+        extra_lines (int): The extra lines that need to be cleared on command
             wrapping.
 
     Usage:
-        >>> menu = Menu(commands=commands, colors=(command_color, comment_color))
-        >>> menu.display()
+        >>> terminal = Terminal(command_color, comment_color)
+        >>> terminal.show_loading()
+        >>> terminal.hide_loading()
+        >>> terminal.show_menu()
     """
 
-    def __init__(self, commands: list[str], colors: tuple[str, str]) -> None:
+    def __init__(self, command_color: str, comment_color: str) -> None:
         """
         Initialize the menu with a list of commands to run.
 
         Args:
-            commands (list[str]): The commands to select from.
             colors (tuple[str, str]): A tuple containing the command and comment
                 color patterns.
         """
-
-        self.commands = commands
-        self.index = 0
-
-        self.command_color = colors[0]
-        self.comment_color = colors[1]
+        self.command_color = command_color
+        self.comment_color = comment_color
 
         self.terminal_size = os.get_terminal_size().columns
 
-    def display(self) -> None:
+    def clear_line(self) -> None:
+        """Clears any text from the last line in the console."""
+        print(f'\x1B[1A\x1B[2K\r', end='')
+
+    def hide_loading(self) -> None:
+        """Hide the loading message."""
+        print('')
+        self.clear_line()
+
+    def show_loading(self) -> None:
+        """
+        Show a loading message while waiting for the response from the API.
+        """
+        # separate the output from the shell command with a single line
+        print('')
+
+        # show the loading prompt
+        terminal_height = os.get_terminal_size().lines
+        print('\n' * (terminal_height - 1), end='')
+        for _ in range(terminal_height - 1):
+            self.clear_line()
+        print(
+            self.comment_color % '⌛️ Your request is being processed...',
+            end='',
+        )
+        sys.stdout.flush()
+
+    def show_menu(self, commands: list[str]) -> None:
         """
         Displays the menu and handles user input.
 
@@ -69,7 +93,12 @@ class Menu:
         The execution ends once no commands are left in the list or the user
         aborts the execution either with the 'Q' key, or by using the regular
         interrupts.
+
+        Args:
+            commands (list[str]): The commands to select from.
         """
+        self.commands = commands
+        self.index = 0
 
         self._print_header()
         self._print_newlines()
@@ -80,7 +109,7 @@ class Menu:
             self.terminal_size = os.get_terminal_size().columns
 
             for _ in range(len(self.commands) + 2 + self.extra_lines):
-                clear_line()
+                self.clear_line()
 
             for index, command in enumerate(self.commands):
                 # truncate longer commands
@@ -113,9 +142,9 @@ class Menu:
                 if self.index < len(self.commands) - 1:
                     self.index += 1
             elif key in ['e', 'E']:
-                self.edit()
+                self._edit_command()
             elif key in [BASE_KEYS.SPACE, OS_KEYS.ENTER]:
-                self.execute()
+                self._execute_command()
                 if self.commands:
                     self._print_header()
                     self._print_newlines()
@@ -125,10 +154,10 @@ class Menu:
             if not self.commands:
                 break
 
-    def edit(self) -> None:
+    def _edit_command(self) -> None:
         """Allows the user to edit the currently selected command."""
         for _ in range(1 + self.extra_lines):
-            clear_line()
+            self.clear_line()
 
         prompt_prefix = '📝 Edit: '
         self.commands[self.index] = readinput(
@@ -140,7 +169,7 @@ class Menu:
         prompt_len = len(self.commands[self.index]) + len(prompt_prefix)
         self.extra_lines = prompt_len // self.terminal_size
 
-    def execute(self) -> None:
+    def _execute_command(self) -> None:
         """
         Executes the currently selected command and removes it from the command
         list.

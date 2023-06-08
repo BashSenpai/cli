@@ -100,7 +100,7 @@ The `prompt` argument represents the question you want to ask or a special comma
 senpai login
 ```
 
-This command prompts you to enter an authentication token, storing it in the configuration file.
+This prompt asks you to enter an authentication token, storing it in the configuration file.
 
 * Change the persona of BashSenpai:
 
@@ -108,7 +108,7 @@ This command prompts you to enter an authentication token, storing it in the con
 senpai become angry pirate
 ```
 
-This command alters BashSenpai's persona to an angry pirate, infusing a fun twist into the responses. You are not confined to a specific list of characters and can input anything you desire. Our ingeniously designed backend API, equipped with multi-level prompts and instructions, ensures all eccentric ideas are nicely integrated with the core functionality of the tool.
+This prompt alters BashSenpai's persona to an angry pirate, infusing a fun twist into the responses. You are not confined to a specific list of characters and can input anything you desire. Our ingeniously designed backend API, equipped with multi-level prompts and instructions, ensures all eccentric ideas are nicely integrated with the core functionality of the tool.
 
 * Ask a question:
 
@@ -116,7 +116,15 @@ This command alters BashSenpai's persona to an angry pirate, infusing a fun twis
 senpai how to disable SSH connections
 ```
 
-This command sends the question to the BashSenpai API and displays an informative and well-formatted response.
+This prompt sends the question to the BashSenpai API and displays an informative and well-formatted response.
+
+* Ask for a command explanation:
+
+```shell
+senpai explain tar
+```
+
+This prompt sends a question about a specific command to the BashSenpai API and displays a list of most common use cases along with informative comments and remarks of what each one does.
 
 ## ⚙️ Options
 

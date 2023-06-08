@@ -370,11 +370,14 @@ class BashSenpai:
 
                 new_line_text += chunk
                 # determine line type and separate commands
-                if new_line:
+                if new_line or chunk.startswith('>'):
                     if chunk.startswith('$'):
                         new_line_type = 'command'
-                        chunk = chunk.lstrip('$').lstrip()
+                        chunk = chunk.lstrip('$ ')
                         print(self.command_color, end='')
+                    elif chunk.startswith('>'):
+                        new_line_type = 'command'
+                        print(self.comment_color, end='')
                     else:
                         if new_line_type == 'command':
                             print('')

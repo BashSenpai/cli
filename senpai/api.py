@@ -84,7 +84,7 @@ class API:
                 'token': token,
                 'version': self._config.get_value('version'),
                 'persona': self._config.get_value('persona'),
-                'command': command,
+                'question': command,
             }
             return await asyncio.to_thread(
                 POST, f'{self.HOST}/explain/', json=data, stream=True,

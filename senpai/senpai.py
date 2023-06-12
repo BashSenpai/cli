@@ -19,16 +19,13 @@ from pathlib import Path
 import platform
 from requests import Response
 import sys
-from typing import Any, Callable, Union
+from typing import Callable, Union
 
 from .api import API
 from .data.config import Config
 from .data.history import History
 from .lib.color import parse_color
 from .terminal import Terminal
-
-
-# TODO: move all printing to screen.py (parse_response method)
 
 
 # default config storage based on OS type

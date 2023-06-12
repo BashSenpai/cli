@@ -66,7 +66,7 @@ def get_version() -> str:
     return __version__
 
 
-async def main():
+async def run():
     """
     Entry point of the BashSenpai command-line interface.
 
@@ -257,5 +257,10 @@ async def main():
         await senpai.ask_question(question)
 
 
+def main():
+    """Runs the CLI in async mode."""
+    asyncio.run(run())
+
+
 if __name__ == '__main__':
-    asyncio.run(main())
+    main()

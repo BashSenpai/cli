@@ -394,7 +394,7 @@ class BashSenpai:
 
         if original_response:
             return {
-                'latest_version': latest_version,
+                'version': latest_version,
                 'response': original_response,
                 'persona': printed_response,
                 'commands': commands,
@@ -402,7 +402,7 @@ class BashSenpai:
 
         else:
             return {
-                'latest_version': latest_version,
+                'version': latest_version,
                 'response': printed_response,
                 'persona': None,
                 'commands': commands,

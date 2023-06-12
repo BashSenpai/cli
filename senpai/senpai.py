@@ -53,9 +53,9 @@ class BashSenpai:
     Attributes:
         CONFIG_DIR (Path): The directory where configuration files are stored.
         DASHBOARD_URL (str): The URL for the dashboard of the application.
-        config (Config): The configuration object managing the settings..
+        config (Config): The configuration object managing the settings.
         history (History): The history object managing the user's interactions.
-        terminal (Terminal): Object for manipulating the content on the screen.
+        terminal (Terminal): The object manipulating the content on the screen.
         api (API): The API object managing the communication with the backend.
         command_color (str): The ANSI color code for commands.
         comment_color (str): The ANSI color code for comments.

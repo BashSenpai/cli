@@ -132,7 +132,7 @@ This prompt sends a question about a specific command to the BashSenpai API and 
 
 * `--comment-color`: sets the color of the comments in the responses.
 
-* `--meta`, `--no-meta`: determines whether to send OS metadata to refine the responses. This includes OS type and version (all OSes), shell type (macOS and Linux), and architecture (macOS). Users can choose to disable this feature for privacy reasons, or in cases where it yields undesired results (for example if the tool is operating on a Windows machine, but the user expects answers about Linux).
+* `--meta`, `--no-meta`: determines whether to send OS metadata to refine the responses. This includes OS type and version (all OSes), shell type (macOS and Linux), and architecture (macOS). Users may choose to disable this feature for privacy reasons, or in cases where it yields undesired results (for example if the tool is operating on a Windows machine, but the user expects answers about Linux).
 
 * `-n, --new`: excludes any preceding history when asking a question. Use this option to initiate a new context.
 

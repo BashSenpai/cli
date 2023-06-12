@@ -59,8 +59,7 @@ class BashSenpai:
         config (Config): The configuration object managing the settings..
         history (History): The history object managing the user's interactions.
         terminal (Terminal): Object for manipulating the content on the screen.
-        _api (API): The private API object managing the communication with the
-            backend.
+        api (API): The API object managing the communication with the backend.
         command_color (str): The ANSI color code for commands.
         comment_color (str): The ANSI color code for comments.
         endline_color (str): THe ANSI color code to end the line.
@@ -88,7 +87,7 @@ class BashSenpai:
         self.config = Config(path=self.CONFIG_DIR)
         self.history = History(path=self.CONFIG_DIR)
 
-        self._api = API(config=self.config, history=self.history)
+        self.api = API(config=self.config, history=self.history)
 
         # parse colors
         command_color = parse_color(self.config.get_value('command_color'))
@@ -116,7 +115,7 @@ class BashSenpai:
         """
         # send an API call with a question and get the response
         metadata = self._get_metadata()
-        task = self._api.question
+        task = self.api.question
         response = await self._run_async_prompt(task, question, metadata)
 
         # if the response is a dict, it already contains an error
@@ -155,7 +154,7 @@ class BashSenpai:
                 from the API.
         """
         # send an async API call with the command
-        response = await self._run_async_prompt(self._api.explain, command)
+        response = await self._run_async_prompt(self.api.explain, command)
 
         # if the response is a dict, it already contains an error
         if not isinstance(response, dict):
@@ -179,7 +178,7 @@ class BashSenpai:
         Raises:
             SystemExit: If there is an error with the authentication process.
         """
-        response = await self._api.login(token)
+        response = await self.api.login(token)
 
         if not response['success']:
             if response['error']['code'] == 1:

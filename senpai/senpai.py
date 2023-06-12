@@ -203,7 +203,7 @@ class BashSenpai:
         *args,
     ) -> Union[Response, dict[str, str]]:
         """
-        Animates the loading dots while waiting for response.
+        Animates the loading dots while waiting for the response.
 
         Args:
             prompt_fn (Callable): The API method to call
@@ -219,10 +219,8 @@ class BashSenpai:
 
         tasks = (run_prompt(), self.terminal.show_loading(),)
         try:
-            print('\x1B[?25l', end='')  # hide cursor
             await asyncio.gather(*tasks)
         except asyncio.CancelledError:
-            print('\x1B[?25h', end='')  # show cursor
             self.terminal.hide_loading()
             return response
 

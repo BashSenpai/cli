@@ -62,12 +62,16 @@ class Terminal:
 
     def hide_loading(self) -> None:
         """Hide the loading message."""
+        print('\x1B[?25h', end='')  # show the cursor
         self.clear_line()
 
     async def show_loading(self) -> None:
         """
         Show a loading message while waiting for the response from the API.
         """
+        # hide the cursor
+        print('\x1B[?25l', end='')
+
         # separate the output from the shell command with a single line
         print('')
 

@@ -1,3 +1,11 @@
+senpai-cli (0.82b) lunar; urgency=medium
+
+  - Feature: new prompt `explain <command>`
+  - Feature: animate the loading message
+  - Improvement: better `--help` output
+
+ -- Bogdan Tatarov <bogdan@tatarov.me>  Mon, 12 Jun 2023 22:32:00 +0300
+
 senpai-cli (0.81b) lunar; urgency=medium
 
   * Update: stream prompt responses

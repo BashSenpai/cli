@@ -69,6 +69,16 @@ yay -S senpai-cli
 
 Supported distributions: any Arch-based rolling-release distribution that supports installing packages from the AUR. **Manjaro** should also work, but it's untested.
 
+### openSUSE Tumbleweed
+
+Install from OBS:
+
+```shell
+sudo zypper addrepo https://download.opensuse.org/repositories/home:bashsenpai/openSUSE_Tumbleweed/home:bashsenpai.repo
+sudo zypper refresh
+sudo zypper install senpai-cli
+```
+
 ### MacOS
 
 Install with Homebrew:
@@ -187,9 +197,9 @@ This project is licensed under the Apache 2.0 License. For more information, see
 
 - [ ] Multi-language support: delivered by ChatGPT
 - [ ] Alpine Linux packages
-- [ ] openSUSE packages
+- [x] openSUSE packages
 - [ ] BSD-based distros packages
-- [ ] Windows code signing
+- [ ] Windows code-signing
 
 ## 👨‍💻 Maintainers
 

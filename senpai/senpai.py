@@ -13,6 +13,7 @@
 # limitations under the License.
 
 import asyncio
+from datetime import datetime
 import json
 import os
 from pathlib import Path
@@ -127,6 +128,7 @@ class BashSenpai:
             'question': question,
             'answer': response.get('response'),
             'persona': response.get('persona'),
+            'timestamp': datetime.now().timestamp(),
         })
         self.history.write()
 

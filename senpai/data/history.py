@@ -12,9 +12,14 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+from datetime import datetime
 import json
 from pathlib import Path
 from typing import Any, Dict, List, Union
+
+
+# time delta in seconds after which the history is skipped
+DELTA_HISTORY = 7 * 60 * 60
 
 
 class History:
@@ -100,13 +105,17 @@ class History:
 
     def get_history(self) -> List[Union[Dict[str, str], Any]]:
         """
-        Returns the current user interaction history.
+        Returns the current user interaction history if not older than 7 hours.
 
         Returns:
             List[Dict[str, Union[str, List[Any]]]]: The current user's
                 interaction history.
         """
-        return self._history
+        now = datetime.now().timestamp()
+        return list(filter(
+            lambda x: now - x.get('timestamp', 0) < DELTA_HISTORY,
+            self._history,
+        ))
 
     def write(self) -> None:
         """

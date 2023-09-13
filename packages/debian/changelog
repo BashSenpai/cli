@@ -1,3 +1,10 @@
+senpai-cli (1.0) lunar; urgency=medium
+
+  - Improvement: send history only if logs are not older than 7 hours
+  - Fix: new version check works again
+
+ -- Bogdan Tatarov <bogdan@tatarov.me>  Wed, 13 Sep 2023 09:54:00 +0800
+
 senpai-cli (0.82b) lunar; urgency=medium
 
   - Feature: new prompt `explain <command>`

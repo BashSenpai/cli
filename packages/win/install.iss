@@ -13,7 +13,7 @@
 ; limitations under the License.
 
 #define MyAppName "BashSenpai CLI"
-#define MyAppVersion "0.82b"
+#define MyAppVersion "1.0"
 #define MyAppPublisher "Bash Senpai"
 #define MyAppURL "https://bashsenpai.com/"
 #define MyAppExeName "senpai.exe"
